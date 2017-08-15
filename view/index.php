@@ -169,8 +169,8 @@ if (Login::isLogged()) {
                         url: 'ping/' + id,
                         success: function (response) {
                             removeData(id);
-                            addData(id, response);
-                            $('#ping' + id).text("Ping: " + response + " ms");
+                            addData(id, response.value);
+                            $('#ping' + id).text("Ping: " + response.value + " ms");
                             setTimeout(function () {
                                 getPing(id);
                             }, 1000);
