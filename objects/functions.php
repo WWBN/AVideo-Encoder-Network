@@ -5,5 +5,5 @@ function ping($addr) {
     exec("ping -n 1 {$addr['host']}", $output, $status);
     $average = end($output);
     $average = explode("=", $average);
-    return (intval(end($average)));
+    return array('value'=>(intval(end($average))),'average'=>$average, 'output'=>$output);
 }

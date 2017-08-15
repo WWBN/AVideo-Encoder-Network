@@ -372,16 +372,5 @@ if (Login::isLogged()) {
             <?php
         }
         ?>
-        <div style="width:75%;">
-            <canvas id="canvas"></canvas>
-        </div>
-        velocidade do ping ida<br>
-        ping volta (pra saber se pode nos ver)
-        Memoria servidor<br>
-        CPU<br>
-        fila<br>
-        resolucao dos videos<br>
-        avaliaçao<br>
-        Max file size
     </body>
 </html>
