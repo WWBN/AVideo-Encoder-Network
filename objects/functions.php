@@ -13,5 +13,5 @@ function ping($addr) {
       $average = $array[1];
      }
     
-    return array('value'=>$average, 'output'=>$output);
+    return array('value'=>$average, 'output'=>$output, 'addr'=>$addr);
 }
