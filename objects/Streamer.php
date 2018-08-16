@@ -1,7 +1,7 @@
 <?php
 
 
-class Streamer extends Object {
+class Streamer extends ObjectYPT {
 
     protected $id, $siteURL, $user, $pass, $created, $modified;
 

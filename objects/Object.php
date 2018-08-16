@@ -1,5 +1,5 @@
 <?php
-abstract class Object{
+abstract class ObjectYPT{
     
     abstract static protected function getTableName();
     abstract static protected function getSearchFieldsNames();

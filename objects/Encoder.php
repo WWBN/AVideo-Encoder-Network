@@ -1,7 +1,7 @@
 <?php
 
 
-class Encoder extends Object {
+class Encoder extends ObjectYPT {
 
     protected $id, $siteURL, $streamer_id, $description, $created, $modified, $name;
 
