@@ -75,6 +75,9 @@ CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`scores` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
+INSERT INTO `YouPHPTube-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('Dedicated Encoder', 'https://encoder.youphptube.com/', '1');
+INSERT INTO `YouPHPTube-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('VPS Encoder', 'https://encoder1.youphptube.com/', '1');
+
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
