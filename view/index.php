@@ -28,7 +28,7 @@ $encoders = Encoder::getAll();
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js" integrity="sha256-+q+dGCSrVbejd3MDuzJHKsk2eXd4sF5XYEMfPZsOnYE=" crossorigin="anonymous"></script>
-
+        
         <link href="view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <link href="view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
@@ -161,19 +161,18 @@ $encoders = Encoder::getAll();
                                         <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
                                             <div class="ellipsis">
                                                 <span class="account-type"><?php echo $value['name']; ?></span><br/>
-                                                <span class="account-amount">Grade </span><br/>
+                                                <span class="account-amount" id="queuesize<?php echo $value['id']; ?>" >Queue Size 0</span><br/>
                                                 <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
                                                     $parts = parse_url($value['siteURL']);
                                                     echo $parts["host"];
                                                     ?></a>
                                             </div>
                                             <div>
-                                                
+
                                                 <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span><span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
-                                                <span id="queuesize<?php echo $value['id']; ?>" class="label label-default">Queue Size 0</span>
                                                 <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
                                             </div>
-                                            
+
                                         </div>
                                     </li>
 
@@ -216,8 +215,8 @@ $encoders = Encoder::getAll();
                     </div>
                 </div>
 
-
-                <script>
+            </div>
+            <script>
                 window.myLine = new Array();
                 window.myCPUPie = new Array();
                 window.myMEMPie = new Array();
@@ -341,11 +340,11 @@ $encoders = Encoder::getAll();
 
                 });
 
-                </script>
+            </script>
 
 
-                <?php
-            }
-            ?>
+            <?php
+        }
+        ?>
     </body>
 </html>
