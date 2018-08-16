@@ -3,7 +3,7 @@
 
 class Encoder extends Object {
 
-    protected $id, $siteURL, $streamer_id, $description, $created, $modified;
+    protected $id, $siteURL, $streamer_id, $description, $created, $modified, $name;
 
     protected static function getSearchFieldsNames() {
         return array('siteURL');
@@ -42,6 +42,14 @@ class Encoder extends Object {
     static function getFirstURL() {
         $row = static::getFirst();
         return $row['siteURL'];
+    }
+    
+    function getName() {
+        return $this->name;
+    }
+
+    function setName($name) {
+        $this->name = $name;
     }
 
     function getId() {

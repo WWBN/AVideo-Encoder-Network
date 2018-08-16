@@ -4,6 +4,7 @@ require_once $config;
 require_once '../objects/Streamer.php';
 require_once '../objects/Login.php';
 require_once '../objects/functions.php';
+require_once $global['systemRootPath'] . 'objects/Encoder.php';
 $streamerURL = @$_GET['webSiteRootURL'];
 if (empty($streamerURL)) {
     $streamerURL = Streamer::getFirstURL();
@@ -11,6 +12,9 @@ if (empty($streamerURL)) {
 if (Login::isLogged()) {
     $streamer = new Streamer(Login::getStreamerId());
 }
+
+$encoders = Encoder::getAll();
+//var_dump($_SESSION);exit;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -36,7 +40,7 @@ if (Login::isLogged()) {
     <body>       
         <?php
         if (!Login::canUpload()) {
-            ?>
+            ?>        
             <div class="row">
                 <div class="col-xs-1 col-md-2"></div>
                 <div class="col-xs-10 col-md-8 ">
@@ -135,17 +139,85 @@ if (Login::isLogged()) {
 
             <link href="view/bootgrid/jquery.bootgrid.min.css" rel="stylesheet" type="text/css"/>
             <script src="view/bootgrid/jquery.bootgrid.min.js" type="text/javascript"></script>
-            <table id="gridEncoder" class="table table-condensed table-hover table-striped">
-                <thead>
-                    <tr>
-                        <th data-column-id="siteURL" data-formatter="siteURL" data-width="40%">URL</th>
-                        <th data-column-id="ping" data-formatter="ping" data-sortable="false"> Ping</th>
-                        <th data-column-id="cpu" data-formatter="cpu" data-sortable="false"> CPU</th>
-                        <th data-column-id="mem" data-formatter="mem" data-sortable="false"> Memory</th>
-                    </tr>
-                </thead>
-            </table>
-            <script>
+
+
+
+            <div class="container-fluid"> <!-- style="overflow:hidden" -->
+                <div class="row">
+                    <div class="col-md-12" style="overflow:auto">
+                        <div id="MyAccountsTab" class="tabbable tabs-left">
+                            <!-- Account selection for desktop - I -->
+                            <ul  class="nav nav-tabs col-md-2">
+                                <?php
+                                $count = 0;
+                                foreach ($encoders as $value) {
+                                    ?>
+
+                                    <li <?php
+                                    if (empty($count)) {
+                                        echo 'class="active"';
+                                    }
+                                    ?>>
+                                        <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
+                                            <div class="ellipsis">
+                                                <span class="account-type"><?php echo $value['name']; ?></span><br/>
+                                                <span class="account-amount">Grade </span><br/>
+                                                <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
+                                                    $parts = parse_url($value['siteURL']);
+                                                    echo $parts["host"];
+                                                    ?></a>
+                                            </div>
+                                            <div>
+                                                
+                                                <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span><span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
+                                                <span id="queuesize<?php echo $value['id']; ?>" class="label label-default">Queue Size 0</span>
+                                                <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
+                                            </div>
+                                            
+                                        </div>
+                                    </li>
+
+                                    <?php
+                                    $count++;
+                                }
+                                ?>
+                            </ul>
+                            <div class="tab-content col-md-10">
+
+                                <?php
+                                $count = 0;
+                                foreach ($encoders as $value) {
+                                    ?>
+
+                                    <div class="tab-pane <?php
+                                    if (empty($count)) {
+                                        echo 'active';
+                                    }
+                                    ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="20"></canvas>
+                                            </div>
+
+                                            <div class="col-sm-12" style="height: 500px;">
+                                                <iframe src="<?php echo $value['siteURL']; ?>?webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100%;width:100%;" height="100%" width="100%"></iframe>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <?php
+                                    $count++;
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <script>
                 window.myLine = new Array();
                 window.myCPUPie = new Array();
                 window.myMEMPie = new Array();
@@ -173,7 +245,7 @@ if (Login::isLogged()) {
                             $('#ping' + id).text("Ping: " + response.value + " ms");
                             setTimeout(function () {
                                 getPing(id);
-                            }, 1000);
+                            }, 3000);
                         }
                     });
                 }
@@ -194,14 +266,6 @@ if (Login::isLogged()) {
                         url: siteURL + 'serverStatus',
                         success: function (response) {
                             if (typeof response == 'object') {
-                                window.myCPUPie[id].data.datasets[0].data = [100 - response.cpu.percent, response.cpu.percent];
-                                window.myCPUPie[id].options.title.text = response.cpu.title;
-                                window.myCPUPie[id].update();
-
-                                window.myMEMPie[id].data.datasets[0].data = [100 - response.memory.percent, response.memory.percent];
-                                window.myMEMPie[id].options.title.text = response.memory.title;
-                                window.myMEMPie[id].update();
-
                                 if (response) {
                                     goOnline(id)
                                 } else {
@@ -216,161 +280,72 @@ if (Login::isLogged()) {
                             }
                             setTimeout(function () {
                                 getEncoder(id, siteURL);
-                            }, 1000);
+                            }, 2500);
                         },
                         error: function () {
-                            window.myCPUPie[id].data.datasets[0].data = [0, 0];
-                            window.myCPUPie[id].options.title.text = "Offline";
-                            window.myCPUPie[id].update();
-
-                            window.myMEMPie[id].data.datasets[0].data = [0, 0];
-                            window.myMEMPie[id].options.title.text = "Offline";
-                            window.myMEMPie[id].update();
                             goOffline(id);
                             setTimeout(function () {
                                 getEncoder(id, siteURL);
-                            }, 2000);
+                            }, 5000);
                         }
-                        
+
                     });
                 }
 
                 $(document).ready(function () {
 
-                    var gridEncoder = $("#gridEncoder").bootgrid({
-                        ajax: true,
-                        url: "encoders.json",
-                        formatters: {
-                            "siteURL": function (column, row) {
-                                return "<a class='btn btn-primary' href='" + row.siteURL + "?webSiteRootURL=<?php echo urlencode($streamer->getSiteURL()); ?>&user=<?php echo $streamer->getUser(); ?>&pass=<?php echo $streamer->getPass(); ?>'>" + row.siteURL + "</a><br>" + row.description;
+
+    <?php
+    foreach ($encoders as $value) {
+        ?>
+
+                        window.myLine[<?php echo $value['id']; ?>] = new Chart(document.getElementById("canvas<?php echo $value['id']; ?>").getContext("2d"), {
+                            animation: false,
+                            type: 'line',
+                            data: {
+                                labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                                datasets: [{
+                                        backgroundColor: 'rgba(0,155, 0, 0.3)',
+                                        borderColor: 'rgba(0,155, 0, 0.5)',
+                                        data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                                    }]
                             },
-                            "status": function (column, row) {
-                                return queuesize + maxfilesize;
-                            },
-                            "cpu": function (column, row) {
-                                var cpu = '<canvas id="cpu' + row.id + '" rowId="' + row.id + '" siteURL="' + row.siteURL + '" class="pie" height="150"></canvas>';
-                                return cpu;
-                            },
-                            "mem": function (column, row) {
-                                var mem = '<canvas id="mem' + row.id + '" rowId="' + row.id + '" siteURL="' + row.siteURL + '" class="pie" height="150"></canvas>';
-                                return mem;
-                            },
-                            "ping": function (column, row) {
-                                var canvas = '<canvas id="canvas' + row.id + '" rowId="' + row.id + '" siteURL="' + row.siteURL + '" class="ping" height="100"></canvas>';
-                                var labels = '<br><span id="label' + row.id + '" class="label label-danger">Offline</span><span id="ping' + row.id + '" class="label label-default">Searching Ping ...</span>';
-                                var queuesize = '<br><span id="queuesize' + row.id + '" class="label label-default">Queue Size 0</span>';
-                                var maxfilesize = '<br><span id="maxfilesize' + row.id + '" class="label label-default">Max File Size 0Mb</span>';
-                                return canvas + labels + queuesize + maxfilesize;
-                            }
-                        }
-                    }).on("loaded.rs.jquery.bootgrid", function () {
-                        $('.ping').each(function () {
-                            var id = $(this).attr('rowId');
-                            window.myLine[id] = new Chart(document.getElementById("canvas" + id).getContext("2d"), {
-                                animation: false,
-                                type: 'line',
-                                data: {
-                                    labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                                    datasets: [{
-                                            backgroundColor: 'rgba(255, 0, 0, 0.3)',
-                                            borderColor: 'rgba(255, 0, 0, 0.5)',
-                                            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+                            options: {
+                                legend: {
+                                    display: false
+                                },
+                                responsive: true,
+                                scales: {
+                                    xAxes: [{
+                                            display: false,
+                                            scaleLabel: {
+                                                display: false
+                                            }
+                                        }],
+                                    yAxes: [{
+                                            display: true,
+                                            scaleLabel: {
+                                                display: false
+                                            }
                                         }]
-                                },
-                                options: {
-                                    legend: {
-                                        display: false
-                                    },
-                                    responsive: true,
-                                    scales: {
-                                        xAxes: [{
-                                                display: false,
-                                                scaleLabel: {
-                                                    display: false
-                                                }
-                                            }],
-                                        yAxes: [{
-                                                display: true,
-                                                scaleLabel: {
-                                                    display: false
-                                                }
-                                            }]
-                                    }
                                 }
-                            });
-
-                            window.myCPUPie[id] = new Chart(document.getElementById("cpu" + id).getContext("2d"), {
-                                type: 'pie',
-                                data: {
-                                    datasets: [{
-                                            data: [
-                                                0,
-                                                0,
-                                            ],
-                                            backgroundColor: [
-                                                'rgba(0, 255, 0, 0.3)',
-                                                'rgba(255, 0, 0, 0.3)'
-                                            ],
-                                            label: 'CPU'
-                                        }],
-                                    labels: [
-                                        "Free",
-                                        "Used"
-                                    ]
-                                },
-                                options: {
-                                    responsive: true,
-                                    legend: {
-                                        display: false
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Loading...'
-                                    }
-                                }
-                            });
-
-                            window.myMEMPie[id] = new Chart(document.getElementById("mem" + id).getContext("2d"), {
-                                type: 'pie',
-                                data: {
-                                    datasets: [{
-                                            data: [
-                                                0,
-                                                0,
-                                            ],
-                                            backgroundColor: [
-                                                'rgba(0, 255, 0, 0.3)',
-                                                'rgba(255, 0, 0, 0.3)'
-                                            ],
-                                            label: 'Memory'
-                                        }],
-                                    labels: [
-                                        "Free",
-                                        "Used"
-                                    ]
-                                },
-                                options: {
-                                    responsive: true,
-                                    legend: {
-                                        display: false
-                                    },
-                                    title: {
-                                        display: true,
-                                        text: 'Loading...'
-                                    }
-                                }
-                            });
-
-                            getPing(id);
-                            getEncoder(id, $(this).attr('siteURL'));
-
+                            }
                         });
-                    });
+
+                        getPing(<?php echo $value['id']; ?>);
+                        getEncoder(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>');
+
+        <?php
+    }
+    ?>
+
                 });
 
-            </script>
-            <?php
-        }
-        ?>
+                </script>
+
+
+                <?php
+            }
+            ?>
     </body>
 </html>
