@@ -30,7 +30,7 @@ $encoders = Encoder::getAll();
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js" integrity="sha256-+q+dGCSrVbejd3MDuzJHKsk2eXd4sF5XYEMfPZsOnYE=" crossorigin="anonymous"></script>
-
+        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
         <link href="view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <link href="view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
@@ -166,7 +166,8 @@ $encoders = Encoder::getAll();
                                                 <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
                                                     $parts = parse_url($value['siteURL']);
                                                     echo $parts["host"];
-                                                    ?></a>
+                                                    ?></a><br>
+                                                    <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span>
                                             </div>
                                             <div>
 
@@ -238,8 +239,10 @@ $encoders = Encoder::getAll();
                         url: 'ping/' + id,
                         success: function (response) {
                             removeData(id);
-                            addData(id, response.value);
-                            $('#ping' + id).text("Ping: " + response.value + " ms");
+                            if(response.value){
+                                addData(id, response.value);
+                                $('#ping' + id).text("Ping: " + response.value + " ms");
+                            }
                             setTimeout(function () {
                                 getPing(id);
                             }, 3000);
@@ -293,6 +296,8 @@ $encoders = Encoder::getAll();
                     $.ajax({
                         url: 'view/getBestEncoder.php',
                         success: function (response) {
+                            $('.recommended').not("#recommended"+response.id).fadeOut();
+                            $("#recommended"+response.id).fadeIn();
                             console.log(response);
                             setTimeout(function () {
                                 getBestEncoder();
