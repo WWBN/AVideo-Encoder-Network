@@ -6,11 +6,47 @@ require_once $config;
 
 $encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score.php"));
 
+$bestEncoder = array('id'=>0, 'ping'=>9999, 'queue_size'=>9999, 'memFreeBytes'=>0);
+
 foreach ($encoders as $value) {
+    
     $ping = floatval($value->ping->value);
     $queue_size = intval($value->serverStatus->queue_size);
     $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
-    var_dump($ping, $queue_size, $memFreeBytes);
+    
+    if(empty($bestEncoder['id'])){
+        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        continue;
+    }
+    
+    if($bestEncoder['queue_size']>$queue_size){
+        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        continue;
+    }
+    
+    if($bestEncoder['ping']>$ping){
+        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        continue;
+    }
+    
+    if($bestEncoder['memFreeBytes']>$memFreeBytes){
+        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        continue;
+    }
 }
+
+echo json_encode($bestEncoder);
 
 ?>
