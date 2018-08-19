@@ -1,6 +1,7 @@
 <?php
 
 function ping($addr) {
+    global $global;
     $file = "{$global['systemRootPath']}cache/ping".md5($addr).".json";
     $lifetimeSeconds = 5;
     if (file_exists($file)) {
