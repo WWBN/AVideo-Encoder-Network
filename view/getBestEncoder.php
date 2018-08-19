@@ -9,11 +9,14 @@ $encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score
 $bestEncoder = array('id' => 0, 'ping' => 9999, 'queue_size' => 9999, 'memFreeBytes' => 0);
 
 foreach ($encoders as $key => $value) {
-
+    if(empty($value->ping)){
+        $value->ping = new stdClass();
+        $value->ping->value = 0;
+    }
     $ping = floatval($value->ping->value);
     $queue_size = intval($value->serverStatus->queue_size);
     $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
-
+    
     if (empty($bestEncoder['id'])) {
         $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;

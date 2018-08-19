@@ -13,8 +13,10 @@ if (Login::isLogged()) {
     $streamer = new Streamer(Login::getStreamerId());
 }
 
+$bestEncoder = json_decode(file_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php"));
+
 $encoders = Encoder::getAll();
-//var_dump($_SESSION);exit;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +30,7 @@ $encoders = Encoder::getAll();
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js" integrity="sha256-+q+dGCSrVbejd3MDuzJHKsk2eXd4sF5XYEMfPZsOnYE=" crossorigin="anonymous"></script>
-        
+
         <link href="view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <script src="view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <link href="view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
@@ -149,12 +151,11 @@ $encoders = Encoder::getAll();
                             <!-- Account selection for desktop - I -->
                             <ul  class="nav nav-tabs col-md-2">
                                 <?php
-                                $count = 0;
                                 foreach ($encoders as $value) {
                                     ?>
 
                                     <li <?php
-                                    if (empty($count)) {
+                                    if ($bestEncoder->id == $value['id']) {
                                         echo 'class="active"';
                                     }
                                     ?>>
@@ -177,19 +178,17 @@ $encoders = Encoder::getAll();
                                     </li>
 
                                     <?php
-                                    $count++;
                                 }
                                 ?>
                             </ul>
                             <div class="tab-content col-md-10">
 
                                 <?php
-                                $count = 0;
                                 foreach ($encoders as $value) {
                                     ?>
 
                                     <div class="tab-pane <?php
-                                    if (empty($count)) {
+                                    if ($bestEncoder->id == $value['id']) {
                                         echo 'active';
                                     }
                                     ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
@@ -207,7 +206,6 @@ $encoders = Encoder::getAll();
                                     </div>
 
                                     <?php
-                                    $count++;
                                 }
                                 ?>
                             </div>

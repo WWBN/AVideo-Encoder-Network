@@ -5,8 +5,8 @@ $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
 require_once '../objects/Encoder.php';
 
-$file = "{$global['systemRootPath']}score.json";
-$lifetimeSeconds = 30;
+$file = "{$global['systemRootPath']}cache/score.json";
+$lifetimeSeconds = 60;
 if (file_exists($file)) {
     $fileAge = time() - filemtime($file);
 } else {
