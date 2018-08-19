@@ -9,6 +9,7 @@ function ping($addr) {
     } else {
         $fileAge = 0;
     }
+    error_log("PING ==> fileAge = $fileAge AND lifetimeSeconds = $lifetimeSeconds");
     if ($fileAge > $lifetimeSeconds) {
         $addr = parse_url($addr);
         if (getenv("OS") == "Windows_NT") {

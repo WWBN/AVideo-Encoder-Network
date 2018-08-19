@@ -12,7 +12,7 @@ if (file_exists($file)) {
 } else {
     $fileAge = 0;
 }
-
+error_log("SCORE ==> fileAge = $fileAge AND lifetimeSeconds = $lifetimeSeconds");
 if ($fileAge > $lifetimeSeconds) {
 
     $encoders = Encoder::getAll();
