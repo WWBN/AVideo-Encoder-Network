@@ -5,7 +5,8 @@ function ping($addr) {
     if(getenv("OS")=="Windows_NT") {
         exec("ping -n 1 {$addr['host']}", $output, $status);
         $average = end($output);
-        $average = intval(end(explode("=", $average)));
+        $out = explode("=", $average);
+        $average = intval(end($out));
      }
      else {
       $output = exec("ping -c 1 -s 64 -t 64 ".$addr['host']);
