@@ -288,9 +288,21 @@ $encoders = Encoder::getAll();
 
                     });
                 }
+                
+                function getBestEncoder() {
+                    $.ajax({
+                        url: 'view/getBestEncoder.php',
+                        success: function (response) {
+                            console.log(response);
+                            setTimeout(function () {
+                                getBestEncoder();
+                            }, 10000);
+                        }
+                    });
+                }
 
                 $(document).ready(function () {
-
+                    getBestEncoder();
 
     <?php
     foreach ($encoders as $value) {
