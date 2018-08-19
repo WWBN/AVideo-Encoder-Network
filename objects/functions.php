@@ -7,7 +7,7 @@ function ping($addr) {
     if (file_exists($file)) {
         $fileAge = time() - filemtime($file);
     } else {
-        $fileAge = 0;
+        $fileAge = $lifetimeSeconds*2;
     }
     error_log("PING ==> fileAge = $fileAge AND lifetimeSeconds = $lifetimeSeconds");
     if ($fileAge > $lifetimeSeconds) {

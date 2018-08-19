@@ -10,7 +10,7 @@ $lifetimeSeconds = 60;
 if (file_exists($file)) {
     $fileAge = time() - filemtime($file);
 } else {
-    $fileAge = 0;
+    $fileAge = $lifetimeSeconds*2;
 }
 error_log("SCORE ==> fileAge = $fileAge AND lifetimeSeconds = $lifetimeSeconds");
 if ($fileAge > $lifetimeSeconds) {
