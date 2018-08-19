@@ -8,14 +8,14 @@ $encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score
 
 $bestEncoder = array('id'=>0, 'ping'=>9999, 'queue_size'=>9999, 'memFreeBytes'=>0);
 
-foreach ($encoders as $value) {
+foreach ($encoders as $key => $value) {
     
     $ping = floatval($value->ping->value);
     $queue_size = intval($value->serverStatus->queue_size);
     $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
     
     if(empty($bestEncoder['id'])){
-        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
@@ -23,7 +23,7 @@ foreach ($encoders as $value) {
     }
     
     if($bestEncoder['queue_size']>$queue_size){
-        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
@@ -31,7 +31,7 @@ foreach ($encoders as $value) {
     }
     
     if($bestEncoder['ping']>$ping){
-        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
@@ -39,7 +39,7 @@ foreach ($encoders as $value) {
     }
     
     if($bestEncoder['memFreeBytes']>$memFreeBytes){
-        $bestEncoder['id'] = $value['id'];
+        $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
