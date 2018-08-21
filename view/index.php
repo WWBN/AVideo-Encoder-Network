@@ -160,15 +160,13 @@ $encoders = Encoder::getAll();
                                     ?>>
                                         <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
                                             <div class="ellipsis">
-                                                <span class="account-type"><?php echo $value['name']; ?></span><br/>
+                                                <span class="account-type"><?php echo $value['name']; ?></span>
+                                                <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span><br/>
                                                 <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span> <span class="account-amount" id="queuesize<?php echo $value['id']; ?>" >Queue Size 0</span><br/>
                                                 <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
                                 $parts = parse_url($value['siteURL']);
                                 echo $parts["host"];
                                     ?></a><br>
-                                                <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span>
-
-
                                                 <span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
                                                 <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
                                             </div>
