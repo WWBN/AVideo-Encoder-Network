@@ -1,7 +1,7 @@
 # YouPHPTube-Encoder-Network (YEN)
 Agregator for YouPHPTube Encoder Servers
 
-Ypt network is a platform designed to streamline your video encoding.
+YouPHPTube-Encoder-Network (YEN) is a platform designed to streamline your video encoding.
 
 This platform has been implemented so that several encoders can be monitored in real time.
 
