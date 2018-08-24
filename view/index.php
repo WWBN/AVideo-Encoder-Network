@@ -5,6 +5,17 @@ require_once '../objects/Streamer.php';
 require_once '../objects/Login.php';
 require_once '../objects/functions.php';
 require_once $global['systemRootPath'] . 'objects/Encoder.php';
+
+if (!empty($_POST['webSiteRootURL'])) {
+    $_GET['webSiteRootURL'] = $_POST['webSiteRootURL'];
+}
+if (!empty($_POST['user'])) {
+    $_GET['user'] = $_POST['user'];
+}
+if (!empty($_POST['pass'])) {
+    $_GET['pass'] = $_POST['pass'];
+}
+
 $streamerURL = @$_GET['webSiteRootURL'];
 if (empty($streamerURL)) {
     $streamerURL = Streamer::getFirstURL();
