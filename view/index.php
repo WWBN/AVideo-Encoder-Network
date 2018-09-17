@@ -17,6 +17,11 @@ if (!empty($_POST['pass'])) {
 }
 
 $streamerURL = @$_GET['webSiteRootURL'];
+
+if (!empty($_GET['webSiteRootURL']) && !empty($_GET['user']) && !empty($_GET['pass']) && empty($_GET['justLogin'])) {
+    Login::logoff();
+}
+
 if (empty($streamerURL)) {
     $streamerURL = Streamer::getFirstURL();
 }
