@@ -16,12 +16,14 @@ foreach ($encoders as $key => $value) {
     $ping = floatval($value->ping->value);
     $queue_size = intval($value->serverStatus->queue_size);
     $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
+    $siteURL = $value->siteURL;
     
     if (empty($bestEncoder['id'])) {
         $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        $bestEncoder['siteURL'] = $siteURL;
         continue;
     }
 
@@ -30,6 +32,7 @@ foreach ($encoders as $key => $value) {
         $bestEncoder['queue_size'] = $queue_size;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        $bestEncoder['siteURL'] = $siteURL;
         continue;
     } else if ($bestEncoder['queue_size'] == $queue_size) {
         if ($bestEncoder['ping'] > $ping) {
@@ -37,6 +40,7 @@ foreach ($encoders as $key => $value) {
             $bestEncoder['queue_size'] = $queue_size;
             $bestEncoder['ping'] = $ping;
             $bestEncoder['memFreeBytes'] = $memFreeBytes;
+            $bestEncoder['siteURL'] = $siteURL;
             continue;
         } else if ($bestEncoder['ping'] == $ping) {
             if ($bestEncoder['memFreeBytes'] > $memFreeBytes) {
@@ -44,6 +48,7 @@ foreach ($encoders as $key => $value) {
                 $bestEncoder['queue_size'] = $queue_size;
                 $bestEncoder['ping'] = $ping;
                 $bestEncoder['memFreeBytes'] = $memFreeBytes;
+                $bestEncoder['siteURL'] = $siteURL;
                 continue;
             }
         }

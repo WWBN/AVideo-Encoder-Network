@@ -21,6 +21,7 @@ if ($fileAge > $lifetimeSeconds) {
 
     foreach ($encoders as $value) {
         $site[$value['id']]['ping'] = json_decode(file_get_contents("{$global['webSiteRootURL']}ping/{$value['id']}"));
+        $site[$value['id']]['siteURL'] = $value['siteURL'];
         $site[$value['id']]['serverStatus'] = json_decode(file_get_contents("{$value['siteURL']}serverStatus"));
     }
 
