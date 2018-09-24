@@ -6,7 +6,7 @@ require_once '../objects/Encoder.php';
 
 
 $obj = new stdClass();
-$obj->queue_size = 0;
+$obj->queue_size = array();
 $obj->is_encoding = false;
 $obj->queue_list = array();
 $obj->msg = array();
