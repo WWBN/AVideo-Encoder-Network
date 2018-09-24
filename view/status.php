@@ -12,7 +12,7 @@ $obj->queue_list = array();
 $obj->msg = array();
 $obj->cmd = array();
 $obj->encoderSiteURL = array();
-$obj->encoding_status = "";
+$obj->encoding_status = array();
 $obj->encoding = array();
 $obj->download_status = array();
 
