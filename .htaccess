@@ -9,6 +9,7 @@
     RewriteRule    ^login$ objects/login.json.php    [NC,L]
     RewriteRule    ^logoff$ objects/logoff.json.php    [NC,L]
     RewriteRule    ^encoders.json$ view/encoders.json.php    [NC,L]
+    RewriteRule    ^status$ view/status.php    [NC,L]
     
 
 </IfModule>
