@@ -12,3 +12,5 @@ With this information the (YEN) helps you decide which encoder to use.
 The use is the same as using a simple encoder, but this tool will help you choose the best encoder at the time of encoding.
 
 After choosing the encoder you wish to use use the instructions contained here https://github.com/DanielnetoDotCom/YouPHPTube-Encoder/wiki/How-to-submit-videos-to-the-encoder
+
+We have it installed here with 2 encoders https://network.youphptube.com/
