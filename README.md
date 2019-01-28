@@ -28,7 +28,7 @@ this tool is inside the Installation directory and must be executed by command l
 
 1 - Go to your terminal using SSH and navigate to the directory YouPHPTube-Network/install
 
-2 - type `php encoder.php` and you will see the options
+2 - type `php encoders.php` and you will see the options
 
 * A - Add new Encoder
 * Q - Quit/Exit
