@@ -3,7 +3,7 @@
 
 class Encoder extends ObjectYPT {
 
-    protected $id, $siteURL, $streamer_id, $description, $created, $modified, $name;
+    protected $id, $siteURL, $streamers_id, $description, $created, $modified, $name;
 
     protected static function getSearchFieldsNames() {
         return array('siteURL');
@@ -87,12 +87,12 @@ class Encoder extends ObjectYPT {
         $this->modified = $modified;
     }
     
-    function getStreamer_id() {
-        return $this->streamer_id;
+    function getStreamers_id() {
+        return $this->streamers_id;
     }
 
-    function setStreamer_id($streamer_id) {
-        $this->streamer_id = $streamer_id;
+    function setStreamers_id($streamers_id) {
+        $this->streamers_id = $streamers_id;
     }
 
     function getDescription() {
