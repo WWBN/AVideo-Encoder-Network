@@ -42,6 +42,10 @@ while (strtolower($option)!=="q") {
 }
 
 function menu() {
+    echo "------------------------------------------";
+    echo "\n";
+    echo "Welcome to YouPHPTube Encoder Network";
+    echo "\n\n";
     echo "A - Add new Encoder";
     echo "\n";
     echo "Q - Quit/Exit";
@@ -53,4 +57,6 @@ function menu() {
         echo "{$value['id']} ----- Remove {$value['siteURL']}";
         echo "\n";
     }
+    echo "__________________________________________";
+    echo "\n";
 }
