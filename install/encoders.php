@@ -32,7 +32,7 @@ while (strtolower($option)!=="q") {
             $encoder = new Encoder(0);
             $encoder->setSiteURL($streamerURL);
             $encoder->setName($name);
-            $encoder->setStreamer_id(1);
+            $encoder->setStreamers_id(1);
             $encoder->save();
             echo "$streamerURL added";
         }
