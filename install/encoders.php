@@ -57,7 +57,7 @@ function menu() {
     $count = 2;
     foreach ($encoders as $value) {
         $count++;
-        echo "{$value['id']} ----- Remove {$value['siteURL']}";
+        echo "{$value['id']} * Remove {$value['siteURL']}";
         echo "\n";
     }
     echo "__________________________________________";
