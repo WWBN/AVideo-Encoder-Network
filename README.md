@@ -22,14 +22,16 @@ on the first time you tried to access the page you will be directed to the insta
 
 # How to add or remove encoders to the network
 
-We have created a tool to help you with the encoders. this tool is inside the Installation directory and must be executed by command line.
+We have created a tool to help you add or remove encoders. 
+
+this tool is inside the Installation directory and must be executed by command line.
 
 1- Go to your terminal using SSH and navigate to the directory YouPHPTube-Network/install
 1- type `php encoder.php` and you will see the options
 
-A - Add new Encoder
-Q - Quit/Exit
-1 * Remove https://encoder.youphptube.com/
-2 * Remove https://encoder2.youphptube.com/
+* A - Add new Encoder
+* Q - Quit/Exit
+* 1 * Remove https://encoder.youphptube.com/
+* 2 * Remove https://encoder2.youphptube.com/
 
 Choose the desire option and follow the instructions.
