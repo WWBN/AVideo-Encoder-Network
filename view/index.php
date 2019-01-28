@@ -1,5 +1,8 @@
 <?php
 $config = dirname(__FILE__) . '/../configuration.php';
+if (!file_exists($config)) {
+    header("Location: install/index.php");
+}
 require_once $config;
 require_once '../objects/Streamer.php';
 require_once '../objects/Login.php';
