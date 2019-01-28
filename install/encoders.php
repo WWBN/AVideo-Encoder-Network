@@ -45,6 +45,8 @@ while (strtolower($option)!=="q") {
 echo "Bye";
 echo "\n\n";
 function menu() {
+    echo "\n";
+    echo "\n";
     echo "------------------------------------------";
     echo "\n";
     echo "Welcome to YouPHPTube Encoder Network";
@@ -61,5 +63,6 @@ function menu() {
         echo "\n";
     }
     echo "__________________________________________";
+    echo "\n";
     echo "\n";
 }
