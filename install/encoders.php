@@ -22,7 +22,7 @@ while (strtolower($option)!=="q") {
     //ob_flush();
     $option = trim(readline("What is your option number? "));
 
-    if (strtolower($option)!=="a") {
+    if (strtolower($option)==="a") {
         $streamerURL = trim(readline("What is the encoder URL? "));
         if (!empty($streamerURL)) {
             if (substr($streamerURL, -1) !== '/') {
@@ -35,7 +35,7 @@ while (strtolower($option)!=="q") {
             $encoder->save();
             echo "$streamerURL added";
         }
-    }else{
+    }else if (strtolower($option)!=="q"){
         $encoder = new Encoder($option);
         $encoder->delete();
     }
