@@ -26,8 +26,8 @@ We have created a tool to help you add or remove encoders.
 
 this tool is inside the Installation directory and must be executed by command line.
 
-1- Go to your terminal using SSH and navigate to the directory YouPHPTube-Network/install
-1- type `php encoder.php` and you will see the options
+1 - Go to your terminal using SSH and navigate to the directory YouPHPTube-Network/install
+1 - type `php encoder.php` and you will see the options
 
 * A - Add new Encoder
 * Q - Quit/Exit
