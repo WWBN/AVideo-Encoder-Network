@@ -19,7 +19,7 @@ require_once $global['systemRootPath'] . 'objects/Encoder.php';
 $option = 0;
 while (strtolower($option)!=="q") {
     menu();
-    ob_flush();
+    //ob_flush();
     $option = trim(readline("What is your option number? "));
 
     if (strtolower($option)!=="a") {
