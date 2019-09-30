@@ -490,3 +490,24 @@ div.bottom-rounded {
         -webkit-border-radius: 4px 4px 4px 4px;
     }
 }
+
+li.active {
+    border-bottom: 3px solid black;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+}
+
+.account-amount {
+    font-family: 'Roboto', sans-serif;
+    color: #656667;
+    font-size: 0.8em;
+    line-height: 0.8em;
+}
+.account-type {
+    font-family: 'Roboto', sans-serif;
+    color: #A0AEB6;
+    font-size: 0.9em;
+    font-weight: bold;
+    line-height: 0.9em;
+    display: block;
+}
