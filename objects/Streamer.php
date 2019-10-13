@@ -24,10 +24,8 @@ class Streamer extends ObjectYPT
         $res = $global['mysqli']->query($sql);
         if ($res) {
             return $res->fetch_assoc();
-        } else {
-            die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
         }
-        return false;
+        die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
     }
 
     private static function getFirst()
@@ -38,10 +36,8 @@ class Streamer extends ObjectYPT
         $res = $global['mysqli']->query($sql);
         if ($res) {
             return $res->fetch_assoc();
-        } else {
-            die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
         }
-        return false;
+        die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
     }
 
     static function getFirstURL()

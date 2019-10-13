@@ -33,10 +33,8 @@ class Encoder extends ObjectYPT
         $res = $global['mysqli']->query($sql);
         if ($res) {
             return $res->fetch_assoc();
-        } else {
-            die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
         }
-        return false;
+        die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
     }
 
     /**
@@ -50,10 +48,8 @@ class Encoder extends ObjectYPT
         $res = $global['mysqli']->query($sql);
         if ($res) {
             return $res->fetch_assoc();
-        } else {
-            die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
         }
-        return false;
+        die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
     }
 
     /**
