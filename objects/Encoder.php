@@ -5,16 +5,26 @@ class Encoder extends ObjectYPT
 
     protected $id, $siteURL, $streamers_id, $description, $created, $modified, $name;
 
+    /**
+     * @return array An array of the field names used when performing searches.
+     */
     protected static function getSearchFieldsNames()
     {
         return array('siteURL');
     }
 
+    /**
+     * @return string The name of the table used for when building SQL queries.
+     */
     protected static function getTableName()
     {
         return 'encoders';
     }
 
+    /**
+     * @param string $siteURL The site URL.
+     * @return array Fetches a row from the database.
+     */
     private static function get($siteURL)
     {
         global $global;
@@ -29,6 +39,9 @@ class Encoder extends ObjectYPT
         return false;
     }
 
+    /**
+     * @return array Fetches just the first row from a database table.
+     */
     private static function getFirst()
     {
         global $global;
@@ -43,6 +56,9 @@ class Encoder extends ObjectYPT
         return false;
     }
 
+    /**
+     * @return string Fetches the site URL cited by the first row of a database table.
+     */
     static function getFirstURL()
     {
         $row = static::getFirst();
