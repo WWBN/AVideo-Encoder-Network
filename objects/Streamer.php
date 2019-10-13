@@ -1,19 +1,23 @@
 <?php
 
 
-class Streamer extends ObjectYPT {
+class Streamer extends ObjectYPT
+{
 
     protected $id, $siteURL, $user, $pass, $created, $modified;
 
-    protected static function getSearchFieldsNames() {
+    protected static function getSearchFieldsNames()
+    {
         return array('siteURL');
     }
 
-    protected static function getTableName() {
+    protected static function getTableName()
+    {
         return 'streamers';
     }
 
-    private static function get($user, $siteURL) {
+    private static function get($user, $siteURL)
+    {
         global $global;
         $sql = "SELECT * FROM  " . static::getTableName() . " WHERE user = '{$user}' AND lower(siteURL) = lower('{$siteURL}') LIMIT 1";
         //echo $sql;exit;
@@ -26,7 +30,8 @@ class Streamer extends ObjectYPT {
         return false;
     }
 
-    private static function getFirst() {
+    private static function getFirst()
+    {
         global $global;
         $sql = "SELECT * FROM  " . static::getTableName() . " LIMIT 1";
 
@@ -39,12 +44,14 @@ class Streamer extends ObjectYPT {
         return false;
     }
 
-    static function getFirstURL() {
+    static function getFirstURL()
+    {
         $row = static::getFirst();
         return $row['siteURL'];
     }
 
-    static function createIfNotExists($user, $pass, $siteURL, $encodedPass = false) {
+    static function createIfNotExists($user, $pass, $siteURL, $encodedPass = false)
+    {
         if (!$encodedPass || $encodedPass === 'false') {
             $pass = md5($pass);
         }
@@ -64,54 +71,66 @@ class Streamer extends ObjectYPT {
         return $s->save();
     }
 
-    function getId() {
+    function getId()
+    {
         return $this->id;
     }
 
-    function getSiteURL() {
+    function getSiteURL()
+    {
         return $this->siteURL;
     }
 
-    function getUser() {
+    function getUser()
+    {
         return $this->user;
     }
 
-    function getPass() {
+    function getPass()
+    {
         return $this->pass;
     }
 
-    function getCreated() {
+    function getCreated()
+    {
         return $this->created;
     }
 
-    function getModified() {
+    function getModified()
+    {
         return $this->modified;
     }
 
-    function setId($id) {
+    function setId($id)
+    {
         $this->id = $id;
     }
 
-    function setSiteURL($siteURL) {
+    function setSiteURL($siteURL)
+    {
         if (!empty($siteURL) && substr($siteURL, -1) !== '/') {
             $siteURL .= "/";
         }
         $this->siteURL = $siteURL;
     }
 
-    function setUser($user) {
+    function setUser($user)
+    {
         $this->user = $user;
     }
 
-    function setPass($pass) {
+    function setPass($pass)
+    {
         $this->pass = $pass;
     }
 
-    function setCreated($created) {
+    function setCreated($created)
+    {
         $this->created = $created;
     }
 
-    function setModified($modified) {
+    function setModified($modified)
+    {
         $this->modified = $modified;
     }
 
