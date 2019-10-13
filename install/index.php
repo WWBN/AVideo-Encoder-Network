@@ -2,7 +2,7 @@
 require_once '../objects/functions.php';
 
 function getPathToApplication() {
-    return str_replace("install/index.php", "", $_SERVER["SCRIPT_FILENAME"]);
+    return str_replace('install/index.php', '', $_SERVER["SCRIPT_FILENAME"]);
 }
 
 function getURLToApplication() {
@@ -54,9 +54,9 @@ function getURLToApplication() {
                                 </div>
                                 <div class="form-group">
                                     <label for="allowedEncoders">
-                                        YouPHPTube Streamers Sites (One per line.) 
+                                        YouPHPTube Streamers Sites (One per line.)
                                         <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
-                                                title="What is this?" 
+                                                title="What is this?"
                                                 data-content="Only the listed sites will be allowed to use this encoder installation">
                                             <i class="glyphicon glyphicon-question-sign"></i>
                                         </button>
@@ -102,7 +102,7 @@ https://encoder2.youphptube.com/</textarea>
                                     <div class="form-group">
                                         <label for="siteURL">YouPHPTube Streamer Site URL
                                             <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
-                                                    title="What is this?" 
+                                                    title="What is this?"
                                                     data-content="If you do not have YouPHPTube Streamer Site yet, download it https://github.com/DanielnetoDotCom/YouPHPTube">
                                                 <i class="glyphicon glyphicon-question-sign"></i>
                                             </button>

@@ -13,11 +13,11 @@ class Login
         }
 
         $postdata = http_build_query(
-                array(
-                    'user' => $user,
-                    'pass' => $pass,
-                    'encodedPass' => $encodedPass
-                )
+            array(
+                'user' => $user,
+                'pass' => $pass,
+                'encodedPass' => $encodedPass
+            )
         );
 
         $opts = array(

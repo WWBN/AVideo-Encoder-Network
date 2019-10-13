@@ -17,16 +17,16 @@ if (!isCommandLineInterface()) {
 require_once '../configuration.php';
 require_once $global['systemRootPath'] . 'objects/Encoder.php';
 $option = 0;
-while (strtolower($option)!=="q") {
+while (strtolower($option) !== 'q') {
     menu();
     //ob_flush();
-    $option = trim(readline("What is your option number? "));
+    $option = trim(readline('What is your option number? '));
 
-    if (strtolower($option)==="a") {
-        $streamerURL = trim(readline("What is the encoder URL? "));
+    if (strtolower($option) === 'a') {
+        $streamerURL = trim(readline('What is the encoder URL? '));
         if (!empty($streamerURL)) {
             if (substr($streamerURL, -1) !== '/') {
-                $streamerURL.="/";
+                $streamerURL .= "/";
             }
             $name = parse_url($streamerURL, PHP_URL_HOST);
             $encoder = new Encoder(0);
@@ -36,7 +36,7 @@ while (strtolower($option)!=="q") {
             $encoder->save();
             echo "$streamerURL added";
         }
-    }else if (strtolower($option)!=="q"){
+    } elseif (strtolower($option) !== 'q') {
         $encoder = new Encoder($option);
         $encoder->delete();
     }

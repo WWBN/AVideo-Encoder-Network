@@ -9,8 +9,9 @@ abstract class ObjectYPT
     protected function load($id)
     {
         $user = self::getFromDb($id);
-        if (empty($user))
+        if (empty($user)) {
             return false;
+        }
         foreach ($user as $key => $value) {
             $this->$key = $value;
         }
@@ -33,12 +34,7 @@ abstract class ObjectYPT
         $sql = "SELECT * FROM ".static::getTableName()." WHERE  id = $id LIMIT 1";
         $global['lastQuery'] = $sql;
         $res = $global['mysqli']->query($sql);
-        if ($res) {
-            $user = $res->fetch_assoc();
-        } else {
-            $user = false;
-        }
-        return $user;
+        return ($res) ? $res->fetch_assoc() : false;
     }
 
     static function getAll()
@@ -51,12 +47,11 @@ abstract class ObjectYPT
         $global['lastQuery'] = $sql;
         $res = $global['mysqli']->query($sql);
         $rows = array();
-        if ($res) {
-            while ($row = $res->fetch_assoc()) {
-                $rows[] = $row;
-            }
-        } else {
+        if (!$res) {
             die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
+        }
+        while ($row = $res->fetch_assoc()) {
+            $rows[] = $row;
         }
         return $rows;
     }
@@ -120,9 +115,9 @@ abstract class ObjectYPT
                 $like[] = " {$value} LIKE '%{$search}%' ";
             }
             if (!empty($like)) {
-                $sql .= " AND (". implode(" OR ", $like).")";
+                $sql .= ' AND (' . implode(' OR ', $like) . ')';
             } else {
-                $sql .= " AND 1=1 ";
+                $sql .= ' AND 1=1 ';
             }
         }
 
@@ -166,16 +161,10 @@ abstract class ObjectYPT
         $global['lastQuery'] = $sql;
         $insert_row = $global['mysqli']->query($sql);
 
-        if ($insert_row) {
-            if (empty($this->id)) {
-                $id = $global['mysqli']->insert_id;
-            } else {
-                $id = $this->id;
-            }
-            return $id;
-        } else {
+        if (!$insert_row) {
             die($sql . ' Error : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
         }
+        return (empty($this->id)) ? $global['mysqli']->insert_id : $this->id;
     }
 
     private function getAllFields()
@@ -186,12 +175,11 @@ abstract class ObjectYPT
         $global['lastQuery'] = $sql;
         $res = $global['mysqli']->query($sql);
         $rows = array();
-        if ($res) {
-            while ($row = $res->fetch_assoc()) {
-                $rows[] = $row["COLUMN_NAME"];
-            }
-        } else {
+        if (!$res) {
             die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
+        }
+        while ($row = $res->fetch_assoc()) {
+            $rows[] = $row["COLUMN_NAME"];
         }
         return $rows;
     }

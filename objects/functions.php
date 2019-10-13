@@ -21,7 +21,6 @@ function ping($addr) {
             $output = exec("ping -c 1 -s 64 -t 64 " . $addr['host']);
             $v = explode("=", $output);
             $array = explode("/", end($v));
-
             $average = floatval(@$array[1]);
         }
         $content = json_encode(array('value'=>$average, 'output'=>$output, 'addr'=>$addr));

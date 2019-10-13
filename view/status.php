@@ -4,7 +4,6 @@ header('Content-Type: application/json');
 require_once dirname(__FILE__) . '/../configuration.php';
 require_once '../objects/Encoder.php';
 
-
 $obj = new stdClass();
 $obj->queue_size = array();
 $obj->is_encoding = array();
@@ -18,8 +17,8 @@ $obj->download_status = array();
 
 $rows = Encoder::getAll();
 foreach ($rows as $value) {
-    $status = json_decode(file_get_contents($value['siteURL']."status"));
-    if(!empty($status)){
+    $status = json_decode(file_get_contents($value['siteURL'] . 'status'));
+    if (!empty($status)){
         $obj->encoderSiteURL[] = $value['siteURL'];
         $obj->queue_size[] = $status->queue_size;
         $obj->is_encoding[] = $status->is_encoding;
