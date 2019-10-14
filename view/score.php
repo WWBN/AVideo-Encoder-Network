@@ -1,5 +1,4 @@
 <?php
-
 header('Content-Type: application/json');
 $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
@@ -13,10 +12,9 @@ if (file_exists($file)) {
     $fileAge = $lifetimeSeconds*2;
 }
 error_log("SCORE ==> fileAge = $fileAge AND lifetimeSeconds = $lifetimeSeconds");
+
 if ($fileAge > $lifetimeSeconds) {
-
     $encoders = Encoder::getAll();
-
     $site = array();
 
     foreach ($encoders as $value) {
@@ -28,9 +26,9 @@ if ($fileAge > $lifetimeSeconds) {
     $content = json_encode($site);
 
     file_put_contents($file, $content);
+
 } else {
     $content = file_get_contents($file);
 }
 
 echo $content;
-?>
