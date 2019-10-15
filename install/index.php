@@ -2,7 +2,7 @@
 require_once '../objects/functions.php';
 
 function getPathToApplication() {
-    return str_replace("install/index.php", "", $_SERVER["SCRIPT_FILENAME"]);
+    return str_replace('install/index.php', '', $_SERVER["SCRIPT_FILENAME"]);
 }
 
 function getURLToApplication() {
@@ -22,7 +22,7 @@ function getURLToApplication() {
         <script src="../view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
     </head>
 
-    <body class="">
+    <body class="<?php echo $global['bodyClass']; ?>">
         <?php
         if (file_exists('../configuration.php')) {
             require_once '../configuration.php';
@@ -54,9 +54,9 @@ function getURLToApplication() {
                                 </div>
                                 <div class="form-group">
                                     <label for="allowedEncoders">
-                                        Streamers Sites (One per line.) 
+                                        Streamers Sites (One per line.)
                                         <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
-                                                title="What is this?" 
+                                                title="What is this?"
                                                 data-content="Only the listed sites will be allowed to use this encoder installation">
                                             <i class="glyphicon glyphicon-question-sign"></i>
                                         </button>
@@ -102,7 +102,7 @@ https://encoder2.youphptube.com/</textarea>
                                     <div class="form-group">
                                         <label for="siteURL">Streamer Site URL
                                             <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
-                                                    title="What is this?" 
+                                                    title="What is this?"
                                                     data-content="If you do not have Streamer Site yet, download it https://github.com/DanielnetoDotCom/YouPHPTube">
                                                 <i class="glyphicon glyphicon-question-sign"></i>
                                             </button>

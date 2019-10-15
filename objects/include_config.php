@@ -4,8 +4,7 @@
 global $global;
 global $config;
 
-
-$global['mysqli'] = new mysqli($mysqlHost, $mysqlUser,$mysqlPass,$mysqlDatabase);
+$global['mysqli'] = new mysqli($mysqlHost, $mysqlUser, $mysqlPass, $mysqlDatabase);
 
 $now = new DateTime();
 $mins = $now->getOffset() / 60;
@@ -18,4 +17,4 @@ $global['mysqli']->query("SET time_zone='$offset';");
 
 session_start();
 
-require_once $global['systemRootPath'].'objects/Object.php';
+require_once $global['systemRootPath'] . 'objects/Object.php';

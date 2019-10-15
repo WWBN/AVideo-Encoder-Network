@@ -2,7 +2,7 @@
 
 function ping($addr) {
     global $global;
-    $file = "{$global['systemRootPath']}cache/ping".md5($addr).".json";
+    $file = "{$global['systemRootPath']}cache/ping" . md5($addr) . ".json";
     $lifetimeSeconds = 5;
     if (file_exists($file)) {
         $fileAge = time() - filemtime($file);
@@ -21,7 +21,6 @@ function ping($addr) {
             $output = exec("ping -c 1 -s 64 -t 64 " . $addr['host']);
             $v = explode("=", $output);
             $array = explode("/", end($v));
-
             $average = floatval(@$array[1]);
         }
         $content = json_encode(array('value'=>$average, 'output'=>$output, 'addr'=>$addr));

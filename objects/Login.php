@@ -1,22 +1,23 @@
 <?php
-
 require_once dirname(__FILE__) . '/../configuration.php';
 require_once dirname(__FILE__) . '/Streamer.php';
 
-class Login {
+class Login
+{
 
-    static function run($user, $pass, $youPHPTubeURL, $encodedPass = false) {
+    static function run($user, $pass, $youPHPTubeURL, $encodedPass = false)
+    {
         global $global;
         if (substr($youPHPTubeURL, -1) !== '/') {
             $youPHPTubeURL .= "/";
         }
 
         $postdata = http_build_query(
-                array(
-                    'user' => $user,
-                    'pass' => $pass,
-                    'encodedPass' => $encodedPass
-                )
+            array(
+                'user' => $user,
+                'pass' => $pass,
+                'encodedPass' => $encodedPass
+            )
         );
 
         $opts = array(
@@ -62,34 +63,41 @@ class Login {
         $_SESSION['login'] = $object;
     }
 
-    static function logoff() {
+    static function logoff()
+    {
         unset($_SESSION['login']);
     }
 
-    static function isLogged() {
+    static function isLogged()
+    {
         return !empty($_SESSION['login']->isLogged);
     }
 
-    static function isAdmin() {
+    static function isAdmin()
+    {
         return !empty($_SESSION['login']->isAdmin);
     }
 
-    static function canUpload() {
+    static function canUpload()
+    {
         return !empty($_SESSION['login']->canUpload);
     }
 
-    static function canComment() {
+    static function canComment()
+    {
         return !empty($_SESSION['login']->canComment);
     }
 
-    static function getStreamerURL() {
+    static function getStreamerURL()
+    {
         if (!static::isLogged()) {
             return false;
         }
         return $_SESSION['login']->streamer;
     }
 
-    static function getStreamerId() {
+    static function getStreamerId()
+    {
         if (!static::isLogged()) {
             return false;
         }

@@ -44,7 +44,7 @@ $encoders = Encoder::getAll();
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Encoder Agregator</title>
+        <title>YouPHPTube Encoder Agregator</title>
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
@@ -57,10 +57,10 @@ $encoders = Encoder::getAll();
         <link href="view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
 
-    <body>       
+    <body>
         <?php
         if (!Login::canUpload()) {
-            ?>        
+            ?>
             <div class="row">
                 <div class="col-xs-1 col-md-2"></div>
                 <div class="col-xs-10 col-md-8 ">
@@ -70,7 +70,7 @@ $encoders = Encoder::getAll();
 
 
                             <div class="form-group">
-                                <label class="col-md-4 control-label">Streamer Site</label>  
+                                <label class="col-md-4 control-label">YouPHPTube Streamer Site</label>
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
@@ -79,7 +79,7 @@ $encoders = Encoder::getAll();
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-4 control-label">User</label>  
+                                <label class="col-md-4 control-label">User</label>
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
@@ -90,7 +90,7 @@ $encoders = Encoder::getAll();
 
 
                             <div class="form-group">
-                                <label class="col-md-4 control-label">Password</label>  
+                                <label class="col-md-4 control-label">Password</label>
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
@@ -131,7 +131,7 @@ $encoders = Encoder::getAll();
                                 if (!response.streamer) {
                                     modal.hidePleaseWait();
                                     swal("Sorry!", "We could not found your streamer site!", "error");
-                                } else if (!response.isLogged) {
+                                } elseif (!response.isLogged) {
                                     modal.hidePleaseWait();
                                     swal("Sorry!", "Your user or password is wrong!", "error");
                                 } else {
@@ -152,7 +152,7 @@ $encoders = Encoder::getAll();
     ?>
 
                 });
-            </script>   
+            </script>
             <?php
         } else {
             ?>
@@ -236,14 +236,14 @@ $encoders = Encoder::getAll();
                 window.myMEMPie = new Array();
                 function addData(id, value) {
                     window.myLine[id].data.labels.push("");
-                    window.myLine[id].data.datasets.forEach(function (dataset) {
+                    window.myLine[id].data.datasets.foreach (function (dataset) {
                         dataset.data.push(value);
                     });
                     window.myLine[id].update();
                 }
                 function removeData(id) {
                     window.myLine[id].data.labels.shift();
-                    window.myLine[id].data.datasets.forEach(function (dataset) {
+                    window.myLine[id].data.datasets.foreach (function (dataset) {
                         dataset.data.shift();
                     });
                     window.myLine[id].update();

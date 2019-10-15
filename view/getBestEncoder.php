@@ -1,5 +1,4 @@
 <?php
-
 header('Content-Type: application/json');
 $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
@@ -9,7 +8,7 @@ $encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score
 $bestEncoder = array('id' => 0, 'ping' => 9999, 'queue_size' => 9999, 'memFreeBytes' => 0);
 
 foreach ($encoders as $key => $value) {
-    if(empty($value->ping)){
+    if (empty($value->ping)){
         $value->ping = new stdClass();
         $value->ping->value = 0;
     }
@@ -34,7 +33,7 @@ foreach ($encoders as $key => $value) {
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
         $bestEncoder['siteURL'] = $siteURL;
         continue;
-    } else if ($bestEncoder['queue_size'] == $queue_size) {
+    } elseif ($bestEncoder['queue_size'] == $queue_size) {
         if ($bestEncoder['ping'] > $ping) {
             $bestEncoder['id'] = $key;
             $bestEncoder['queue_size'] = $queue_size;
@@ -42,18 +41,15 @@ foreach ($encoders as $key => $value) {
             $bestEncoder['memFreeBytes'] = $memFreeBytes;
             $bestEncoder['siteURL'] = $siteURL;
             continue;
-        } else if ($bestEncoder['ping'] == $ping) {
-            if ($bestEncoder['memFreeBytes'] > $memFreeBytes) {
-                $bestEncoder['id'] = $key;
-                $bestEncoder['queue_size'] = $queue_size;
-                $bestEncoder['ping'] = $ping;
-                $bestEncoder['memFreeBytes'] = $memFreeBytes;
-                $bestEncoder['siteURL'] = $siteURL;
-                continue;
-            }
+        } elseif ($bestEncoder['ping'] == $ping && $bestEncoder['memFreeBytes'] > $memFreeBytes) {
+            $bestEncoder['id'] = $key;
+            $bestEncoder['queue_size'] = $queue_size;
+            $bestEncoder['ping'] = $ping;
+            $bestEncoder['memFreeBytes'] = $memFreeBytes;
+            $bestEncoder['siteURL'] = $siteURL;
+            continue;
         }
     }
 }
 
 echo json_encode($bestEncoder);
-?>
