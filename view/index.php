@@ -44,7 +44,7 @@ $encoders = Encoder::getAll();
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>YouPHPTube Encoder Agregator</title>
+        <title>Encoder Agregator</title>
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
@@ -70,7 +70,7 @@ $encoders = Encoder::getAll();
 
 
                             <div class="form-group">
-                                <label class="col-md-4 control-label">YouPHPTube Streamer Site</label>  
+                                <label class="col-md-4 control-label">Streamer Site</label>  
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
