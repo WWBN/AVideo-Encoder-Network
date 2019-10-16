@@ -54,7 +54,7 @@ function getURLToApplication() {
                                 </div>
                                 <div class="form-group">
                                     <label for="allowedEncoders">
-                                        YouPHPTube Streamers Sites (One per line.)
+                                        Streamers Sites (One per line.)
                                         <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
                                                 title="What is this?"
                                                 data-content="Only the listed sites will be allowed to use this encoder installation">
@@ -100,10 +100,10 @@ https://encoder2.youphptube.com/</textarea>
                                 <div class="alert alert-info" id="streamer" >
 
                                     <div class="form-group">
-                                        <label for="siteURL">YouPHPTube Streamer Site URL
+                                        <label for="siteURL">Streamer Site URL
                                             <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
                                                     title="What is this?"
-                                                    data-content="If you do not have YouPHPTube Streamer Site yet, download it https://github.com/DanielnetoDotCom/YouPHPTube">
+                                                    data-content="If you do not have Streamer Site yet, download it https://github.com/DanielnetoDotCom/YouPHPTube">
                                                 <i class="glyphicon glyphicon-question-sign"></i>
                                             </button>
                                         </label>
@@ -113,21 +113,21 @@ https://encoder2.youphptube.com/</textarea>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="inputUser">YouPHPTube Streamer Site admin User</label>
+                                        <label for="inputUser">Streamer Site admin User</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
                                             <input  id="inputUser" placeholder="User" class="form-control"  type="text" value="admin" required >
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="siteURL">YouPHPTube Streamer Site admin Password</label>
+                                        <label for="siteURL">Streamer Site admin Password</label>
                                         <div class="input-group">
                                             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                             <input  id="inputPassword" placeholder="Password" class="form-control"  type="password" value="" >
                                         </div>
                                     </div>
                                     <div class="alert alert-warning">
-                                        If you do not have YouPHPTube Streamer Site yet, download it <a href="https://github.com/DanielnetoDotCom/YouPHPTube" target="_blank">here</a>. Then, please, go back here and finish this installation.
+                                        If you do not have Streamer Site yet, download it <a href="https://github.com/DanielnetoDotCom/YouPHPTube" target="_blank">here</a>. Then, please, go back here and finish this installation.
                                     </div>
                                 </div>
                             </div>
