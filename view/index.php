@@ -131,7 +131,7 @@ $encoders = Encoder::getAll();
                                 if (!response.streamer) {
                                     modal.hidePleaseWait();
                                     swal("Sorry!", "We could not found your streamer site!", "error");
-                                } elseif (!response.isLogged) {
+                                } else if (!response.isLogged) {
                                     modal.hidePleaseWait();
                                     swal("Sorry!", "Your user or password is wrong!", "error");
                                 } else {
