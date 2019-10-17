@@ -235,11 +235,15 @@ $encoders = Encoder::getAll();
                 window.myCPUPie = new Array();
                 window.myMEMPie = new Array();
                 function addData(id, value) {
-                    window.myLine[id].data.labels.push("");
-                    window.myLine[id].data.datasets.foreach(function (dataset) {
-                        dataset.data.push(value);
-                    });
-                    window.myLine[id].update();
+                    try {
+                        window.myLine[id].data.labels.push("");
+                        window.myLine[id].data.datasets.foreach(function (dataset) {
+                            dataset.data.push(value);
+                        });
+                        window.myLine[id].update();
+                    } catch (e) {
+
+                    }
                 }
                 function removeData(id) {
                     try {
@@ -251,7 +255,6 @@ $encoders = Encoder::getAll();
                     } catch (e) {
 
                     }
-
                 }
 
                 function getPing(id) {
