@@ -173,9 +173,9 @@ $encoders = Encoder::getAll();
                                     ?>
 
                                     <li <?php
-                            if ($bestEncoder->id == $value['id']) {
-                                echo 'class="active"';
-                            }
+                                    if ($bestEncoder->id == $value['id']) {
+                                        echo 'class="active"';
+                                    }
                                     ?>>
                                         <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
                                             <div class="ellipsis">
@@ -183,9 +183,9 @@ $encoders = Encoder::getAll();
                                                 <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span><br/>
                                                 <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span> <span class="account-amount" id="queuesize<?php echo $value['id']; ?>" >Queue Size 0</span><br/>
                                                 <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
-                                $parts = parse_url($value['siteURL']);
-                                echo $parts["host"];
-                                    ?></a><br>
+                                                    $parts = parse_url($value['siteURL']);
+                                                    echo $parts["host"];
+                                                    ?></a><br>
                                                 <span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
                                                 <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
                                             </div>
@@ -204,9 +204,9 @@ $encoders = Encoder::getAll();
                                     ?>
 
                                     <div class="tab-pane <?php
-                            if ($bestEncoder->id == $value['id']) {
-                                echo 'active';
-                            }
+                                    if ($bestEncoder->id == $value['id']) {
+                                        echo 'active';
+                                    }
                                     ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
 
                                         <div class="row">
@@ -236,17 +236,22 @@ $encoders = Encoder::getAll();
                 window.myMEMPie = new Array();
                 function addData(id, value) {
                     window.myLine[id].data.labels.push("");
-                    window.myLine[id].data.datasets.foreach (function (dataset) {
+                    window.myLine[id].data.datasets.foreach(function (dataset) {
                         dataset.data.push(value);
                     });
                     window.myLine[id].update();
                 }
                 function removeData(id) {
-                    window.myLine[id].data.labels.shift();
-                    window.myLine[id].data.datasets.foreach (function (dataset) {
-                        dataset.data.shift();
-                    });
-                    window.myLine[id].update();
+                    try {
+                        window.myLine[id].data.labels.shift();
+                        window.myLine[id].data.datasets.foreach(function (dataset) {
+                            dataset.data.shift();
+                        });
+                        window.myLine[id].update();
+                    } catch (e) {
+
+                    }
+
                 }
 
                 function getPing(id) {
