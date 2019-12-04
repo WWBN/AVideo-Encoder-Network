@@ -15,7 +15,7 @@ function getURLToApplication() {
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>Install YouPHPTube</title>
+        <title>Install AVideo</title>
         <link rel="icon" href="../view/img/favicon.png">
         <link href="../view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
         <link href="../view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
@@ -61,8 +61,8 @@ function getURLToApplication() {
                                             <i class="glyphicon glyphicon-question-sign"></i>
                                         </button>
                                     </label>
-                                    <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value="">https://encoder.youphptube.com/
-https://encoder2.youphptube.com/</textarea>
+                                    <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value="">https://encoder.avideo.com/
+https://encoder2.avideo.com/</textarea>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -84,7 +84,7 @@ https://encoder2.youphptube.com/</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label for="databaseName">Database Name</label>
-                                    <input type="text" class="form-control" id="databaseName" placeholder="Enter Database Name" value="youPHPTubeNetwork" required="required">
+                                    <input type="text" class="form-control" id="databaseName" placeholder="Enter Database Name" value="aVideoNetwork" required="required">
                                 </div>
                                 <div class="form-group">
                                     <label for="createTables">Do you want to create database and tables?</label>
@@ -103,7 +103,7 @@ https://encoder2.youphptube.com/</textarea>
                                         <label for="siteURL">Streamer Site URL
                                             <button class="btn btn-xs btn-primary" data-toggle="popover"  type="button"
                                                     title="What is this?"
-                                                    data-content="If you do not have Streamer Site yet, download it https://github.com/DanielnetoDotCom/YouPHPTube">
+                                                    data-content="If you do not have Streamer Site yet, download it https://github.com/DanielnetoDotCom/AVideo">
                                                 <i class="glyphicon glyphicon-question-sign"></i>
                                             </button>
                                         </label>
@@ -127,7 +127,7 @@ https://encoder2.youphptube.com/</textarea>
                                         </div>
                                     </div>
                                     <div class="alert alert-warning">
-                                        If you do not have Streamer Site yet, download it <a href="https://github.com/DanielnetoDotCom/YouPHPTube" target="_blank">here</a>. Then, please, go back here and finish this installation.
+                                        If you do not have Streamer Site yet, download it <a href="https://github.com/DanielnetoDotCom/AVideo" target="_blank">here</a>. Then, please, go back here and finish this installation.
                                     </div>
                                 </div>
                             </div>

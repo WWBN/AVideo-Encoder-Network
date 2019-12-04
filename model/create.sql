@@ -5,19 +5,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
 
 -- -----------------------------------------------------
--- Schema YouPHPTube-Encoder-Network
+-- Schema AVideo-Encoder-Network
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema YouPHPTube-Encoder-Network
+-- Schema AVideo-Encoder-Network
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `YouPHPTube-Encoder-Network` DEFAULT CHARACTER SET utf8 ;
-USE `YouPHPTube-Encoder-Network` ;
+CREATE SCHEMA IF NOT EXISTS `AVideo-Encoder-Network` DEFAULT CHARACTER SET utf8 ;
+USE `AVideo-Encoder-Network` ;
 
 -- -----------------------------------------------------
--- Table `YouPHPTube-Encoder-Network`.`streamers`
+-- Table `AVideo-Encoder-Network`.`streamers`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`streamers` (
+CREATE TABLE IF NOT EXISTS `AVideo-Encoder-Network`.`streamers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `siteURL` VARCHAR(255) NOT NULL,
   `user` VARCHAR(45) NOT NULL,
@@ -29,9 +29,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `YouPHPTube-Encoder-Network`.`encoders`
+-- Table `AVideo-Encoder-Network`.`encoders`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`encoders` (
+CREATE TABLE IF NOT EXISTS `AVideo-Encoder-Network`.`encoders` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `siteURL` VARCHAR(255) NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -43,16 +43,16 @@ CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`encoders` (
   INDEX `fk_encoders_streamers1_idx` (`streamers_id` ASC),
   CONSTRAINT `fk_encoders_streamers1`
     FOREIGN KEY (`streamers_id`)
-    REFERENCES `YouPHPTube-Encoder-Network`.`streamers` (`id`)
+    REFERENCES `AVideo-Encoder-Network`.`streamers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `YouPHPTube-Encoder-Network`.`scores`
+-- Table `AVideo-Encoder-Network`.`scores`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`scores` (
+CREATE TABLE IF NOT EXISTS `AVideo-Encoder-Network`.`scores` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `streamers_id` INT NOT NULL,
   `encoders_id` INT NOT NULL,
@@ -65,18 +65,18 @@ CREATE TABLE IF NOT EXISTS `YouPHPTube-Encoder-Network`.`scores` (
   INDEX `fk_streamers_has_encoders_streamers_idx` (`streamers_id` ASC),
   CONSTRAINT `fk_streamers_has_encoders_streamers`
     FOREIGN KEY (`streamers_id`)
-    REFERENCES `YouPHPTube-Encoder-Network`.`streamers` (`id`)
+    REFERENCES `AVideo-Encoder-Network`.`streamers` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_streamers_has_encoders_encoders1`
     FOREIGN KEY (`encoders_id`)
-    REFERENCES `YouPHPTube-Encoder-Network`.`encoders` (`id`)
+    REFERENCES `AVideo-Encoder-Network`.`encoders` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-INSERT INTO `YouPHPTube-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('Dedicated Encoder', 'https://encoder.youphptube.com/', '1');
-INSERT INTO `YouPHPTube-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('VPS Encoder', 'https://encoder2.youphptube.com/', '1');
+INSERT INTO `AVideo-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('Dedicated Encoder', 'https://encoder.avideo.com/', '1');
+INSERT INTO `AVideo-Encoder-Network`.`encoders` (`name`, `siteURL`, `streamers_id`) VALUES ('VPS Encoder', 'https://encoder2.avideo.com/', '1');
 
 
 SET SQL_MODE=@OLD_SQL_MODE;

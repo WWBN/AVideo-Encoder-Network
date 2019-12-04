@@ -5,11 +5,11 @@ require_once dirname(__FILE__) . '/Streamer.php';
 class Login
 {
 
-    static function run($user, $pass, $youPHPTubeURL, $encodedPass = false)
+    static function run($user, $pass, $aVideoURL, $encodedPass = false)
     {
         global $global;
-        if (substr($youPHPTubeURL, -1) !== '/') {
-            $youPHPTubeURL .= "/";
+        if (substr($aVideoURL, -1) !== '/') {
+            $aVideoURL .= "/";
         }
 
         $postdata = http_build_query(
@@ -34,7 +34,7 @@ class Login
 
         $context = stream_context_create($opts);
 
-        $result = @file_get_contents($youPHPTubeURL . 'login', false, $context);
+        $result = @file_get_contents($aVideoURL . 'login', false, $context);
         if (empty($result)) {
             $object = new stdClass();
             $object->streamer = false;
@@ -45,10 +45,10 @@ class Login
             $object->canComment = false;
         } else {
             $object = json_decode($result);
-            $object->streamer = $youPHPTubeURL;
+            $object->streamer = $aVideoURL;
             $object->streamers_id = 0;
             if (!empty($object->canUpload)) {
-                $object->streamers_id = Streamer::createIfNotExists($user, $pass, $youPHPTubeURL, $encodedPass);
+                $object->streamers_id = Streamer::createIfNotExists($user, $pass, $aVideoURL, $encodedPass);
             }
             if ($object->streamers_id) {
                 $s = new Streamer($object->streamers_id);

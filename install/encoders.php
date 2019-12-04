@@ -49,7 +49,7 @@ function menu() {
     echo "\n";
     echo "------------------------------------------";
     echo "\n";
-    echo "Welcome to YouPHPTube Encoder Network";
+    echo "Welcome to AVideo Encoder Network";
     echo "\n\n";
     echo "A - Add new Encoder";
     echo "\n";
