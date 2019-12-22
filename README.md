@@ -9,6 +9,8 @@ This platform has been implemented so that several encoders can be monitored in 
 
 The system works by doing some real-time testing on the encoders servers, with check ping speed, queue encoding length and free memory of each server.
 
+<a href="http://git.encoder.avideo.com/" class="" target="_blank">AVideo Encoder</a>
+
 With this information the (AEN) helps you decide which encoder to use.
 
 The use is the same as using a simple encoder, but this tool will help you choose the best encoder at the time of encoding.
