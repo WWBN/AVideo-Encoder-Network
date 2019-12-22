@@ -1,4 +1,4 @@
-# AVideo-Encoder-Network (YEN)
+# AVideo-Encoder-Network (AEN)
 Aggregator for AVideo Platform Encoder Servers
 
 AVideo-Encoder-Network (YEN) is a platform designed to streamline your video encoding.
