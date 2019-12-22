@@ -1,5 +1,7 @@
 <img src="https://platform.avideo.com/website/assets/151/images/avideo_network.png"/>
 
+<img src="https://platform.avideo.com/website/assets/151/images/svg/balancing.svg"/>
+
 # AVideo-Encoder-Network (AEN)
 Aggregator for AVideo Platform Encoder Servers
 
