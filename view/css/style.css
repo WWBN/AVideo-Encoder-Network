@@ -411,15 +411,15 @@ div.bottom-rounded {
 
 li{
     border: 1px solid #DCE1E5;
-    background-color: #FFF;
-}
-
-li:hover{
     background-color: #EEE;
 }
 
+li:hover{
+    background-color: #FFF;
+}
+
 li.active, li.active:hover {
-    background-color: #DCE1E5;
+    background-color: azure;
     z-index: 10;
 }
 
@@ -432,7 +432,7 @@ li.active:after {
     border-left: 0;
     border-bottom: 13px solid transparent;
     border-top: 13px solid transparent;
-    border-left: 10px solid #DCE1E5;
+    border-left: 10px solid azure;
 }
 
 @media (max-width: 768px) {
