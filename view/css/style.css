@@ -462,7 +462,7 @@ li.active:after {
 
 }
 
-@media (max-width: 520px) {
+@media (max-width: 768px) {
     .tabs-left > .nav-tabs > li {
         float: none;
     }
