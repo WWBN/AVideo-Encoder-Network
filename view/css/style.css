@@ -495,9 +495,6 @@ div.bottom-rounded {
         float: left;
     }
 
-    li.active {
-        border-width: 1px !important;
-    }
 }
 
 @media (max-width: 520px) {
@@ -510,10 +507,12 @@ div.bottom-rounded {
     }
 }
 
+li{
+    border: 1px solid #F7F9F9;
+}
+
 li.active {
-    border-bottom: 3px solid black;
-    border-left: 1px solid black;
-    border-top: 1px solid black;
+    border: 1px solid black;
 }
 
 .account-amount {
