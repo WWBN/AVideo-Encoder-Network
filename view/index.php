@@ -159,7 +159,7 @@ $encoders = Encoder::getAll();
 
             <link href="view/bootgrid/jquery.bootgrid.min.css" rel="stylesheet" type="text/css"/>
             <script src="view/bootgrid/jquery.bootgrid.min.js" type="text/javascript"></script>
-
+zzzzz
 
 
             <div class="container-fluid"> <!-- style="overflow:hidden" -->
@@ -176,7 +176,7 @@ $encoders = Encoder::getAll();
                                     if ($bestEncoder->id == $value['id']) {
                                         echo 'class="active"';
                                     }
-                                    ?>>
+                                    ?> style="cursor: pointer;">
                                         <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
                                             <div class="ellipsis">
                                                 <span class="account-type"><?php echo $value['name']; ?></span>
