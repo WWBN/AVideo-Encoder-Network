@@ -1,17 +1,21 @@
-# AVideo-Encoder-Network (YEN)
-Aggregator for AVideo Encoder Servers
+<img src="https://platform.avideo.com/website/assets/151/images/avideo_network.png"/>
 
-AVideo-Encoder-Network (YEN) is a platform designed to streamline your video encoding.
+# AVideo-Encoder-Network (AEN)
+Aggregator for AVideo Platform Encoder Servers
+
+AVideo-Encoder-Network (AEN) is a platform designed to streamline your video encoding.
 
 This platform has been implemented so that several encoders can be monitored in real time.
 
 The system works by doing some real-time testing on the encoders servers, with check ping speed, queue encoding length and free memory of each server.
 
-With this information the (YEN) helps you decide which encoder to use.
+This article asumes you know about <a href="http://git.encoder.avideo.com/" class="" target="_blank">AVideo Encoder</a>
+
+With this information the (AEN) helps you decide which encoder to use.
 
 The use is the same as using a simple encoder, but this tool will help you choose the best encoder at the time of encoding.
 
-After choosing the encoder you wish to use use the instructions contained here https://github.com/DanielnetoDotCom/AVideo-Encoder/wiki/How-to-submit-videos-to-the-encoder
+After choosing the encoder you wish to use use the instructions contained here https://github.com/WWBN/AVideo-Encoder/wiki/How-to-submit-videos-to-the-encoder
 
 We have it installed it here with 2 encoders https://network.avideo.com/
 
