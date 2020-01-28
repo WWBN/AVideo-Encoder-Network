@@ -455,6 +455,10 @@ li.active:after {
     li.active:after {
         content: none;
     }
+    
+    ul{
+        overflow: hidden;
+    }
 
 }
 
