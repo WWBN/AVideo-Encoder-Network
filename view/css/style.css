@@ -276,14 +276,6 @@ div.bottom-rounded {
     border-radius: 4px 0 0 4px;
 }
 
-.tabs-left > .nav-tabs > li > a:hover,
-.tabs-left > .nav-tabs > li > a:focus,
-.tabs-left > .nav-tabs > li > div:hover,
-.tabs-left > .nav-tabs > li > div:focus{
-    border-color: #eeeeee #dddddd #eeeeee #eeeeee;
-    background-color: #eeeeee;
-}
-
 .tabs-left > .nav-tabs .active > a,
 .tabs-left > .nav-tabs .active > a:hover,
 .tabs-left > .nav-tabs .active > a:focus,
