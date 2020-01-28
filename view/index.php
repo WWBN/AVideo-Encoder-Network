@@ -164,7 +164,7 @@ $encoders = Encoder::getAll();
                     <div class="col-md-12" style="overflow:auto">
                         <div id="MyAccountsTab" class="tabbable tabs-left">
                             <!-- Account selection for desktop - I -->
-                            <ul  class="nav nav-tabs col-md-2">
+                            <ul class="nav nav-tabs col-md-2 hidden-md" style="z-index: 2;">
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
@@ -195,29 +195,23 @@ $encoders = Encoder::getAll();
                                 ?>
                             </ul>
                             <div class="tab-content col-md-10">
-
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
-
                                     <div class="tab-pane <?php
                                     if ($bestEncoder->id == $value['id']) {
                                         echo 'active';
                                     }
                                     ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
-
                                         <div class="row">
                                             <div class="col-sm-12">
                                                 <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="20"></canvas>
                                             </div>
-
                                             <div class="col-sm-12" style="height: 70vh;">
                                                 <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100%;width:100%;" height="100%" width="100%"></iframe>
                                             </div>
                                         </div>
-
                                     </div>
-
                                     <?php
                                 }
                                 ?>
