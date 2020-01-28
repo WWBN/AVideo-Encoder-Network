@@ -441,7 +441,7 @@ li{
     border: 1px solid #DCE1E5;
 }
 
-li.active:hover{
+li:hover{
     background-color: #CCC;
 }
 
