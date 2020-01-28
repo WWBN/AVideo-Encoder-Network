@@ -479,7 +479,7 @@ div.bottom-rounded {
 }
 
 /** For elements on the same line that jump down - I */
-@media (max-width: 767px) {
+@media (max-width: 1200px) {
     .mt-20 {
         margin-top:20px;
     }
@@ -492,7 +492,7 @@ div.bottom-rounded {
     }
 
     .tabs-left > .nav-tabs > li {
-        float: left;
+        /* float: left; */
     }
 
     li.active {
