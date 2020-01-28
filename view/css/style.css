@@ -457,6 +457,10 @@ li.active {
     z-index: 10;
 }
 
+li.active .account-type {
+    color: #777;
+}
+
 .account-amount {
     font-family: 'Roboto', sans-serif;
     color: #656667;
