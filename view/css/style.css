@@ -496,7 +496,7 @@ div.bottom-rounded {
     }
 
     li.active {
-        border-width: 1px;
+        border-width: 1px !important;
     }
 }
 
