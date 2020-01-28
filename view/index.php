@@ -239,7 +239,7 @@ $encoders = Encoder::getAll();
                 function removeData(id) {
                     try {
                         window.myLine[id].data.labels.shift();
-                        window.myLine[id].data.datasets.foreach(function (dataset) {
+                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset = > {
                             dataset.data.shift();
                         });
                         window.myLine[id].update();
