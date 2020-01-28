@@ -228,7 +228,7 @@ $encoders = Encoder::getAll();
                 function addData(id, value) {
                     try {
                         window.myLine[id].data.labels.push("");
-                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset = > {
+                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset => {
                             dataset.data.push(value);
                         });
                         window.myLine[id].update();
@@ -239,7 +239,7 @@ $encoders = Encoder::getAll();
                 function removeData(id) {
                     try {
                         window.myLine[id].data.labels.shift();
-                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset = > {
+                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset => {
                             dataset.data.shift();
                         });
                         window.myLine[id].update();
