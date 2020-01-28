@@ -500,6 +500,16 @@ div.bottom-rounded {
     }
 }
 
+@media (max-width: 520px) {
+    .tabs-left > .nav-tabs > li {
+        float: none;
+    }
+
+    .tabs-left > .nav-tabs {
+        width: 100%;
+    }
+}
+
 li.active {
     border-bottom: 3px solid black;
     border-left: 1px solid black;
