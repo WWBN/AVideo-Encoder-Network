@@ -419,7 +419,7 @@ li:hover{
 }
 
 li.active, li.active:hover {
-    background-color: azure;
+    background-color: #DCE1E5;
     z-index: 10;
 }
 
@@ -432,7 +432,7 @@ li.active:after {
     border-left: 0;
     border-bottom: 13px solid transparent;
     border-top: 13px solid transparent;
-    border-left: 10px solid azure;
+    border-left: 10px solid #DCE1E5;
 }
 
 @media (max-width: 768px) {
