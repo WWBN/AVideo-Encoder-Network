@@ -439,10 +439,11 @@ div.bottom-rounded {
 
 li{
     border: 1px solid #DCE1E5;
+    background-color: #FFF;
 }
 
 li:hover{
-    background-color: #CCC;
+    background-color: #EEE;
 }
 
 li.active, li.active:hover {
