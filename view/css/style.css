@@ -435,40 +435,17 @@ li.active:after {
     border-left: 10px solid #DCE1E5;
 }
 
-/** For elements on the same line that jump down - I */
-@media (max-width: 1200px) {
-    .mt-20 {
-        margin-top:20px;
+@media (max-width: 768px) {
+    .tabs-left > .nav-tabs {
+        width: 100%;
     }
-
-    .tab-content {
-        border-left-style: solid;
-        border-radius: 4px 4px 4px 4px;
-        -moz-border-radius: 4px 4px 4px 4px;
-        -webkit-border-radius: 4px 4px 4px 4px;
-    }
-
-    .tabs-left > .nav-tabs > li {
-        float: left;
-    }
-
+    
     li.active:after {
         content: none;
     }
     
     ul{
         overflow: hidden;
-    }
-
-}
-
-@media (max-width: 768px) {
-    .tabs-left > .nav-tabs > li {
-        float: none;
-    }
-
-    .tabs-left > .nav-tabs {
-        width: 100%;
     }
 }
 
