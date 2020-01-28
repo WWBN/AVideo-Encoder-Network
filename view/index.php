@@ -333,8 +333,8 @@ $encoders = Encoder::getAll();
                             data: {
                                 labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                                 datasets: [{
-                                        backgroundColor: 'rgba(0,155, 0, 0.3)',
-                                        borderColor: 'rgba(0,155, 0, 0.5)',
+                                        backgroundColor: 'rgba(253,198,0, 0.3)',
+                                        borderColor: 'rgba(253,198,0,0.5)',
                                         data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                                     }]
                             },
