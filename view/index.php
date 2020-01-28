@@ -228,7 +228,7 @@ $encoders = Encoder::getAll();
                 function addData(id, value) {
                     try {
                         window.myLine[id].data.labels.push("");
-                        window.myLine[id].data.datasets.foreach(function (dataset) {
+                        Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset = > {
                             dataset.data.push(value);
                         });
                         window.myLine[id].update();
