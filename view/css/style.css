@@ -356,7 +356,6 @@ div.bottom-rounded {
 .tabs-left > .nav-tabs .active div:hover, 
 .tabs-left > .nav-tabs .active div:focus
 {
-    background-color: #FFFFFF;
 
     border-bottom-style: none;
     border-left-style: none;
