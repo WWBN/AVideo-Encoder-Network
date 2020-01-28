@@ -164,7 +164,7 @@ $encoders = Encoder::getAll();
                     <div class="col-md-12" style="overflow:auto">
                         <div id="MyAccountsTab" class="tabbable tabs-left">
                             <!-- Account selection for desktop - I -->
-                            <ul class="nav nav-tabs col-md-2" style="z-index: 2;">
+                            <ul class="nav nav-tabs col-md-2 col-sm-3" style="z-index: 2;">
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
@@ -194,7 +194,7 @@ $encoders = Encoder::getAll();
                                 }
                                 ?>
                             </ul>
-                            <div class="tab-content col-md-10">
+                            <div class="tab-content col-md-10 col-sm-9">
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
