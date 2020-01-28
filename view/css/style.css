@@ -419,7 +419,8 @@ li:hover{
 }
 
 li.active, li.active:hover {
-    background-color: #DCE1E5;
+    border-color: #fdc600;
+    background-color: #fdc600;
     z-index: 10;
 }
 
@@ -432,7 +433,7 @@ li.active:after {
     border-left: 0;
     border-bottom: 13px solid transparent;
     border-top: 13px solid transparent;
-    border-left: 10px solid #DCE1E5;
+    border-left: 10px solid #fdc600;
 }
 
 @media (max-width: 768px) {
