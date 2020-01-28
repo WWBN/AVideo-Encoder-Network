@@ -492,7 +492,7 @@ div.bottom-rounded {
     }
 
     .tabs-left > .nav-tabs > li {
-        /* float: left; */
+        float: left;
     }
 
     li.active {
