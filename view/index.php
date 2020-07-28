@@ -315,7 +315,7 @@ $encoders = Encoder::getAll();
                             console.log(response);
                             setTimeout(function () {
                                 getBestEncoder();
-                            }, 10000);
+                            }, 30000);
                         }
                     });
                 }
