@@ -44,7 +44,7 @@ $encoders = Encoder::getAll();
         <meta name="description" content="">
         <meta name="author" content="">
 
-        <title>Encoder Agregator</title>
+        <title>Encoder Network</title>
         <link rel="icon" href="view/img/favicon.png">
         <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
@@ -259,7 +259,7 @@ $encoders = Encoder::getAll();
                             }
                             setTimeout(function () {
                                 getPing(id);
-                            }, 3000);
+                            }, 30000);
                         }
                     });
                 }
