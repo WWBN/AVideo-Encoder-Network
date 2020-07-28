@@ -62,7 +62,7 @@ function getURLToApplication() {
                                         </button>
                                     </label>
                                     <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value="">https://encoder.avideo.com/
-https://encoder2.avideo.com/</textarea>
+https://encoder1.avideo.com/</textarea>
                                 </div>
                             </div>
                             <div class="col-md-4">
