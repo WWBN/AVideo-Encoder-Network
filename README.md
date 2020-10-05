@@ -1,4 +1,4 @@
-<img src="https://platform.avideo.com/website/assets/151/images/avideo_network.png"/>
+<img src="https://avideo.tube/website/assets/151/images/avideo_network.png"/>
 
 # AVideo-Encoder-Network (AEN)
 Aggregator for AVideo Platform Encoder Servers
