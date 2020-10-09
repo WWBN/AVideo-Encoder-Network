@@ -9,19 +9,9 @@ require_once '../objects/Login.php';
 require_once '../objects/functions.php';
 require_once $global['systemRootPath'] . 'objects/Encoder.php';
 
-if (!empty($_POST['webSiteRootURL'])) {
-    $_GET['webSiteRootURL'] = $_POST['webSiteRootURL'];
-}
-if (!empty($_POST['user'])) {
-    $_GET['user'] = $_POST['user'];
-}
-if (!empty($_POST['pass'])) {
-    $_GET['pass'] = $_POST['pass'];
-}
+$streamerURL = @$_REQUEST['webSiteRootURL'];
 
-$streamerURL = @$_GET['webSiteRootURL'];
-
-if (!empty($_GET['webSiteRootURL']) && !empty($_GET['user']) && !empty($_GET['pass']) && empty($_GET['justLogin'])) {
+if (!empty($_REQUEST['webSiteRootURL']) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass']) && empty($_REQUEST['justLogin'])) {
     Login::logoff();
 }
 
@@ -33,6 +23,11 @@ if (Login::isLogged()) {
 }
 
 $bestEncoder = json_decode(file_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php"));
+
+if (empty($bestEncoder)) {
+    $bestEncoder = new stdClass();
+    $bestEncoder->id = 0;
+}
 
 $encoders = Encoder::getAll();
 ?>
@@ -53,7 +48,7 @@ $encoders = Encoder::getAll();
         <script src="view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <link href="view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
         <script src="view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
-        <script src="view/js/main.js" type="text/javascript"></script>
+        <script src="view/js/main.js?<?php echo filectime("{$global['systemRootPath']}view/js/main.js"); ?>" type="text/javascript"></script>
         <link href="view/css/style.css" rel="stylesheet" type="text/css"/>
     </head>
 
@@ -83,7 +78,7 @@ $encoders = Encoder::getAll();
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                        <input  id="inputUser" placeholder="User" class="form-control"  type="text" value="<?php echo @$_GET['user']; ?>" required >
+                                        <input  id="inputUser" placeholder="User" class="form-control"  type="text" value="<?php echo @$_REQUEST['user']; ?>" required >
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +89,7 @@ $encoders = Encoder::getAll();
                                 <div class="col-md-8 inputGroupContainer">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                        <input  id="inputPassword" placeholder="Password" class="form-control"  type="password" value="<?php echo @$_GET['pass']; ?>" >
+                                        <input  id="inputPassword" placeholder="Password" class="form-control"  type="password" value="<?php echo @$_REQUEST['pass']; ?>" >
                                     </div>
                                 </div>
                             </div>
@@ -113,7 +108,7 @@ $encoders = Encoder::getAll();
             <script>
                 var encodedPass = <?php
         // if pass all parameters submit the form
-        echo (!empty($streamerURL) && !empty($_GET['user']) && !empty($_GET['pass'])) ? 'true' : 'false';
+        echo (!empty($streamerURL) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass'])) ? 'true' : 'false';
         ?>;
                 $(document).ready(function () {
                     $('#loginForm').submit(function (evt) {
@@ -134,8 +129,13 @@ $encoders = Encoder::getAll();
                                 } else if (!response.isLogged) {
                                     modal.hidePleaseWait();
                                     swal("Sorry!", "Your user or password is wrong!", "error");
-                                } else {
-                                    document.location = document.location;
+                                } else {                                    
+                                    var url = new URL(document.location);
+                                    url.searchParams.append('justLogin', 1);
+                                    if(typeof response.PHPSESSID !== 'undefined' && response.PHPSESSID){
+                                        url.searchParams.append('PHPSESSID', response.PHPSESSID);
+                                    }
+                                    document.location = url;
                                 }
                             }
                         });
@@ -146,7 +146,7 @@ $encoders = Encoder::getAll();
                     });
     <?php
 // if pass all parameters submit the form
-    if (!empty($streamerURL) && !empty($_GET['user']) && !empty($_GET['pass'])) {
+    if (!empty($streamerURL) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass'])) {
         echo '$(\'#loginForm\').submit()';
     }
     ?>
@@ -164,7 +164,7 @@ $encoders = Encoder::getAll();
                     <div class="col-md-12" style="overflow:auto">
                         <div id="MyAccountsTab" class="tabbable tabs-left">
                             <!-- Account selection for desktop - I -->
-                            <ul class="nav nav-tabs col-md-2 col-sm-3" style="z-index: 2;">
+                            <ul class="nav nav-tabs col-md-2 col-sm-3" style="z-index: 2; height: 95vh; ">
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
@@ -194,7 +194,7 @@ $encoders = Encoder::getAll();
                                 }
                                 ?>
                             </ul>
-                            <div class="tab-content col-md-10 col-sm-9">
+                            <div class="tab-content col-md-10 col-sm-9" style="min-height: 95vh;">
                                 <?php
                                 foreach ($encoders as $value) {
                                     ?>
@@ -207,8 +207,8 @@ $encoders = Encoder::getAll();
                                             <div class="col-sm-12">
                                                 <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="20"></canvas>
                                             </div>
-                                            <div class="col-sm-12" style="height: 70vh;">
-                                                <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100%;width:100%;" height="100%" width="100%"></iframe>
+                                            <div class="col-sm-12" style="min-height: 70vh;">
+                                                <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100vh;width:100%;" height="100%" width="100%"></iframe>
                                             </div>
                                         </div>
                                     </div>
@@ -253,13 +253,17 @@ $encoders = Encoder::getAll();
                         url: 'ping/' + id,
                         success: function (response) {
                             removeData(id);
-                            if (response.value) {
-                                addData(id, response.value);
-                                $('#ping' + id).text("Ping: " + response.value + " ms");
+                            var timeOut = 120000;// 2 min
+                            if (typeof response !== 'undefined' && response) {
+                                if (response.value) {
+                                    addData(id, response.value);
+                                    $('#ping' + id).text("Ping: " + response.value + " ms");
+                                }
+                                timeOut = 30000;
                             }
                             setTimeout(function () {
                                 getPing(id);
-                            }, 30000);
+                            }, timeOut);
                         }
                     });
                 }
