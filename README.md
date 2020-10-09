@@ -1,4 +1,4 @@
-<img src="https://platform.avideo.com/website/assets/151/images/avideo_network.png"/>
+<img src="https://avideo.tube/website/assets/151/images/avideo_network.png"/>
 
 # AVideo-Encoder-Network (AEN)
 Aggregator for AVideo Platform Encoder Servers
@@ -9,7 +9,7 @@ This platform has been implemented so that several encoders can be monitored in 
 
 The system works by doing some real-time testing on the encoders servers, with check ping speed, queue encoding length and free memory of each server.
 
-This article asumes you know about <a href="http://git.encoder.avideo.com/" class="" target="_blank">AVideo Encoder</a>
+This article asumes you know about <a href="http://git-encoder.avideo.tube/" class="" target="_blank">AVideo Encoder</a>
 
 With this information the (AEN) helps you decide which encoder to use.
 
