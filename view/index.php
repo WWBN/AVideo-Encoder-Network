@@ -279,7 +279,9 @@ $encoders = Encoder::getAll();
                     $('#label' + id).text("Online");
                 }
 
+                var getEncoderTimout = [];
                 function getEncoder(id, siteURL) {
+                    clearTimeout(getEncoderTimout[id]);
                     $.ajax({
                         url: siteURL + 'serverStatus',
                         success: function (response) {
@@ -296,15 +298,15 @@ $encoders = Encoder::getAll();
                             } else {
                                 goOffline(id)
                             }
-                            setTimeout(function () {
+                            getEncoderTimout[id] = setTimeout(function () {
                                 getEncoder(id, siteURL);
-                            }, 2500);
+                            }, 5000);
                         },
                         error: function () {
                             goOffline(id);
-                            setTimeout(function () {
+                            getEncoderTimout[id] = setTimeout(function () {
                                 getEncoder(id, siteURL);
-                            }, 5000);
+                            }, 15000);
                         }
 
                     });
