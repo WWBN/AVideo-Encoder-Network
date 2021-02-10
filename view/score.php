@@ -4,6 +4,11 @@ $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
 require_once '../objects/Encoder.php';
 
+$opts = array('http' =>
+  array( 'timeout' => 1 )
+); 
+$context  = stream_context_create($opts);
+
 $file = "{$global['systemRootPath']}cache/score.json";
 $lifetimeSeconds = 60;
 if (file_exists($file)) {
@@ -18,9 +23,9 @@ if ($fileAge > $lifetimeSeconds) {
     $site = array();
 
     foreach ($encoders as $value) {
-        $site[$value['id']]['ping'] = json_decode(file_get_contents("{$global['webSiteRootURL']}ping/{$value['id']}"));
+        $site[$value['id']]['ping'] = json_decode(file_get_contents("{$global['webSiteRootURL']}ping/{$value['id']}", false, $context));
         $site[$value['id']]['siteURL'] = $value['siteURL'];
-        $site[$value['id']]['serverStatus'] = json_decode(file_get_contents("{$value['siteURL']}serverStatus"));
+        $site[$value['id']]['serverStatus'] = json_decode(file_get_contents("{$value['siteURL']}serverStatus", false, $context));
     }
 
     $content = json_encode($site);
