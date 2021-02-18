@@ -284,6 +284,7 @@ $encoders = Encoder::getAll();
                     clearTimeout(getEncoderTimout[id]);
                     $.ajax({
                         url: siteURL + 'serverStatus',
+                        timeout: 1000,
                         success: function (response) {
                             if (typeof response == 'object') {
                                 if (response) {
