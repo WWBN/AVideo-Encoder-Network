@@ -5,7 +5,7 @@ require_once $config;
 
 $encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score.php"));
 
-$bestEncoder = array('id' => 0, 'ping' => 9999, 'queue_size' => 9999, 'memFreeBytes' => 0);
+$bestEncoder = array('id' => 0, 'ping' => 9999, 'queue_size' => 9999, 'concurrent' => 1, 'memFreeBytes' => 0);
 
 foreach ($encoders as $key => $value) {
     if (empty($value->ping)){
@@ -17,26 +17,34 @@ foreach ($encoders as $key => $value) {
     $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
     $siteURL = $value->siteURL;
     
+    if (isset($value->serverStatus->concurrent))
+        $concurrent = intval($value->serverStatus->concurrent);
+    else
+        $concurrent = 1;
+
     if (empty($bestEncoder['id'])) {
         $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['concurrent'] = $concurrent;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
         $bestEncoder['siteURL'] = $siteURL;
         continue;
     }
 
-    if ($bestEncoder['queue_size'] > $queue_size) {
+    if ($bestEncoder['queue_size'] / $bestEncoder['concurrent'] > $queue_size / $concurrent) {
         $bestEncoder['id'] = $key;
         $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['concurrent'] = $concurrent;
         $bestEncoder['ping'] = $ping;
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
         $bestEncoder['siteURL'] = $siteURL;
         continue;
-    } elseif ($bestEncoder['queue_size'] == $queue_size) {
+    } elseif ($bestEncoder['queue_size'] / $bestEncoder['concurrent'] == $queue_size / $concurrent) {
         if ($bestEncoder['ping'] > $ping) {
             $bestEncoder['id'] = $key;
             $bestEncoder['queue_size'] = $queue_size;
+            $bestEncoder['concurrent'] = $concurrent;
             $bestEncoder['ping'] = $ping;
             $bestEncoder['memFreeBytes'] = $memFreeBytes;
             $bestEncoder['siteURL'] = $siteURL;
@@ -44,6 +52,7 @@ foreach ($encoders as $key => $value) {
         } elseif ($bestEncoder['ping'] == $ping && $bestEncoder['memFreeBytes'] > $memFreeBytes) {
             $bestEncoder['id'] = $key;
             $bestEncoder['queue_size'] = $queue_size;
+            $bestEncoder['concurrent'] = $concurrent;
             $bestEncoder['ping'] = $ping;
             $bestEncoder['memFreeBytes'] = $memFreeBytes;
             $bestEncoder['siteURL'] = $siteURL;
