@@ -14,7 +14,7 @@ foreach ($encoders as $key => $value) {
     }
     $ping = floatval($value->ping->value);
     $queue_size = intval($value->serverStatus->queue_size);
-    $memFreeBytes = intval($value->serverStatus->memory->memFreeBytes);
+    $memFreeBytes = floatval($value->serverStatus->memory->memFreeBytes);
     $siteURL = $value->siteURL;
     
     if (isset($value->serverStatus->concurrent))
@@ -40,8 +40,25 @@ foreach ($encoders as $key => $value) {
         $bestEncoder['memFreeBytes'] = $memFreeBytes;
         $bestEncoder['siteURL'] = $siteURL;
         continue;
-    } elseif ($bestEncoder['queue_size'] / $bestEncoder['concurrent'] == $queue_size / $concurrent) {
-        if ($bestEncoder['ping'] > $ping) {
+    }
+   if ($bestEncoder['queue_size'] / $bestEncoder['concurrent'] < $queue_size / $concurrent) {
+        continue;
+   }
+
+   if ($bestEncoder['concurrent'] < $concurrent) {
+        $bestEncoder['id'] = $key;
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['concurrent'] = $concurrent;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        $bestEncoder['siteURL'] = $siteURL;
+        continue;
+   }
+   if ($bestEncoder['concurrent'] > $concurrent) {
+       continue;
+   }
+
+  if ($bestEncoder['ping'] > $ping) {
             $bestEncoder['id'] = $key;
             $bestEncoder['queue_size'] = $queue_size;
             $bestEncoder['concurrent'] = $concurrent;
@@ -49,15 +66,19 @@ foreach ($encoders as $key => $value) {
             $bestEncoder['memFreeBytes'] = $memFreeBytes;
             $bestEncoder['siteURL'] = $siteURL;
             continue;
-        } elseif ($bestEncoder['ping'] == $ping && $bestEncoder['memFreeBytes'] > $memFreeBytes) {
-            $bestEncoder['id'] = $key;
-            $bestEncoder['queue_size'] = $queue_size;
-            $bestEncoder['concurrent'] = $concurrent;
-            $bestEncoder['ping'] = $ping;
-            $bestEncoder['memFreeBytes'] = $memFreeBytes;
-            $bestEncoder['siteURL'] = $siteURL;
-            continue;
-        }
+   }
+   if ($bestEncoder['ping'] < $ping) {
+       continue;
+   }
+
+   if ($bestEncoder['memFreeBytes'] < $memFreeBytes) {
+        $bestEncoder['id'] = $key;
+        $bestEncoder['queue_size'] = $queue_size;
+        $bestEncoder['concurrent'] = $concurrent;
+        $bestEncoder['ping'] = $ping;
+        $bestEncoder['memFreeBytes'] = $memFreeBytes;
+        $bestEncoder['siteURL'] = $siteURL;
+        continue;
     }
 }
 
