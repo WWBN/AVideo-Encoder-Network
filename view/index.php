@@ -172,8 +172,6 @@ $encoders = Encoder::getAll();
         } else {
             ?>
 
-            <link href="view/bootgrid/jquery.bootgrid.min.css" rel="stylesheet" type="text/css"/>
-            <script src="view/bootgrid/jquery.bootgrid.min.js" type="text/javascript"></script>
             <div class="container-fluid"> <!-- style="overflow:hidden" -->
                 <div class="row">
                     <div class="col-md-12" style="overflow:auto">
