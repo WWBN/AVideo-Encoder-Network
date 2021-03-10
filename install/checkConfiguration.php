@@ -1,6 +1,7 @@
 <?php
 
 if (file_exists("../videos/configuration.php")) {
+    echo "Can not create configuration again";
     error_log("Can not create configuration again: ".  json_encode($_SERVER));
     exit;
 }

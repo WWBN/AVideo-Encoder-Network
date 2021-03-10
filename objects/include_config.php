@@ -15,6 +15,7 @@ $mins -= $hrs * 60;
 $offset = sprintf('%+d:%02d', $hrs*$sgn, $mins);
 $global['mysqli']->query("SET time_zone='$offset';");
 
+header('Set-Cookie: cross-site-cookie=name; SameSite=None; Secure');
 session_start();
 
 require_once $global['systemRootPath'] . 'objects/Object.php';

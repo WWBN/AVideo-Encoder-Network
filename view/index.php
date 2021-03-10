@@ -40,16 +40,31 @@ $encoders = Encoder::getAll();
         <meta name="author" content="">
 
         <title>Encoder Network</title>
-        <link rel="icon" href="view/img/favicon.png">
-        <script src="view/js/jquery-3.2.0.min.js" type="text/javascript"></script>
+        
+        <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $streamerURL; ?>videos/favicon.png">
+        <link rel="icon" type="image/png" href="<?php echo $streamerURL; ?>videos/favicon.png">
+        <link rel="shortcut icon" href="<?php echo $streamerURL; ?>videos/favicon.ico" sizes="16x16,24x24,32x32,48x48,144x144">
+        <meta name="msapplication-TileImage" content="<?php echo $streamerURL; ?>videos/favicon.png">
+
+        <link href="<?php echo $streamerURL; ?>view/css/fontawesome-free-5.5.0-web/css/all.min.css"" rel="stylesheet" crossorigin="anonymous">
+        <script src="<?php echo $streamerURL; ?>view/js/jquery-3.5.1.min.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
-        <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-        <link href="view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-        <script src="view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-        <link href="view/js/seetalert/sweetalert.css" rel="stylesheet" type="text/css"/>
-        <script src="view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
-        <script src="view/js/main.js?<?php echo filectime("{$global['systemRootPath']}view/js/main.js"); ?>" type="text/javascript"></script>
-        <link href="view/css/style.css" rel="stylesheet" type="text/css"/>
+        
+        <script src="<?php echo $streamerURL; ?>view/js/script.js" type="text/javascript"></script>
+        <link href="<?php echo $streamerURL; ?>view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <script src="<?php echo $streamerURL; ?>view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="<?php echo $streamerURL; ?>view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
+        <script src="<?php echo $streamerURL; ?>view/js/js-cookie/js.cookie.js" type="text/javascript"></script>
+
+        <script src="<?php echo $global['webSiteRootURL']; ?>view/js/main.js?<?php echo filectime($global['systemRootPath'] . "view/js/main.js"); ?>" type="text/javascript"></script>
+        <link href="<?php echo $global['webSiteRootURL']; ?>view/css/style.css?<?php echo filectime($global['systemRootPath'] . "view/css/style.css"); ?>" rel="stylesheet" type="text/css"/>
+        
+        <link href="<?php echo $streamerURL; ?>view/css/main.css"" rel="stylesheet" crossorigin="anonymous">
+        <link href="<?php echo $streamerURL; ?>view/theme.css.php" rel="stylesheet" type="text/css"/>
+        
+        
+        
+        
     </head>
 
     <body>
