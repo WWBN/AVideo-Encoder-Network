@@ -193,7 +193,7 @@ $encoders = Encoder::getAll();
                                             <div class="ellipsis">
                                                 <span class="account-type"><?php echo $value['name']; ?></span>
                                                 <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span><br/>
-                                                <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span> <span class="account-amount" id="queuesize<?php echo $value['id']; ?>" >Queue Size 0</span><br/>
+                                                <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span> <span class="account-amount" id="queuesize<?php echo $value['id']; ?>" >Queue Size 0 </span> / <span class="account-amount" id="concurrent<?php echo $value['id']; ?>" >Concurrent 1 </span> <br/>
                                                 <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
                                                     $parts = parse_url($value['siteURL']);
                                                     echo $parts["host"];
@@ -299,6 +299,7 @@ $encoders = Encoder::getAll();
                     clearTimeout(getEncoderTimout[id]);
                     $.ajax({
                         url: siteURL + 'serverStatus',
+                        timeout: 1000,
                         success: function (response) {
                             if (typeof response == 'object') {
                                 if (response) {
@@ -308,6 +309,7 @@ $encoders = Encoder::getAll();
                                 }
 
                                 $('#queuesize' + id).text("Queue Size " + response.queue_size);
+                                $('#concurrent' + id).text("Concurrent " + response.concurrent);
                                 $('#maxfilesize' + id).text("Max File Size " + response.file_upload_max_size);
 
                             } else {
