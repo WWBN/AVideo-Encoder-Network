@@ -43,7 +43,7 @@ class Streamer extends ObjectYPT
     static function getFirstURL()
     {
         $row = static::getFirst();
-        return $row['siteURL'];
+        return addLastSlash($row['siteURL']);
     }
 
     static function createIfNotExists($user, $pass, $siteURL, $encodedPass = false)

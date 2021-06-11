@@ -31,3 +31,11 @@ function ping($addr) {
 
     return json_decode($content);
 }
+
+function hasLastSlash($word) {
+    return substr($word, -1) === '/';
+}
+
+function addLastSlash($word) {
+    return $word . (hasLastSlash($word) ? "" : "/");
+}
