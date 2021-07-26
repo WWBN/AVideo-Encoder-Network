@@ -61,6 +61,18 @@ $configFile = '../configuration.php';
         }
 
         if (empty($global['webSiteRootURL'])) {
+            if(!is_writable($configFile)){
+                ?>
+                <div class="container">
+                    <h3 class="alert alert-error">
+                        <span class="glyphicon glyphicon-ok-circle"></span>
+                        Please make sure your <code><?php echo getPathToApplication(); ?>configuration.php</code> file is writable
+                        <hr>
+                        <code>chmod 777 <?php echo getPathToApplication(); ?>configuration.php</code>
+                    </h3>
+                </div>
+                <?php
+            }else{
             ?>
             <div class="container">
                 <img src="../view/img/logo.png" alt="Logo" class="img img-responsive center-block"/>
@@ -161,7 +173,11 @@ $configFile = '../configuration.php';
                 </div>
 
             </div>
-        <?php } ?>
+        <?php 
+        
+            } 
+        }
+        ?>
         <script src="../view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
         <script src="../view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
         <script src="../view/js/main.js" type="text/javascript"></script>
