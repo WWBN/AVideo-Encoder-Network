@@ -2,8 +2,13 @@
 $config = dirname(__FILE__) . '/../configuration.php';
 if (!file_exists($config)) {
     header("Location: install/index.php");
+    exit;
 }
 require_once $config;
+if (empty($global['webSiteRootURL'])) {
+    header("Location: install/index.php");
+    exit;
+}
 require_once '../objects/Streamer.php';
 require_once '../objects/Login.php';
 require_once '../objects/functions.php';

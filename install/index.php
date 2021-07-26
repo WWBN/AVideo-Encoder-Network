@@ -11,6 +11,8 @@ function getURLToApplication() {
     $url = $url[0];
     return $url;
 }
+
+$configFile = '../configuration.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -25,19 +27,40 @@ function getURLToApplication() {
 
     <body class="<?php echo $global['bodyClass']; ?>">
         <?php
-        if (file_exists('../configuration.php')) {
-            require_once '../configuration.php';
-            ?>
-            <div class="container">
-                <h3 class="alert alert-success">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Your system is installed, remove the <code><?php echo $global['systemRootPath']; ?>install</code> directory to continue
-                    <hr>
-                    <a href="<?php echo $global['webSiteRootURL']; ?>" class="btn btn-success btn-lg center-block">Go to the main page</a>
-                </h3>
-            </div>
-            <?php
+        if (file_exists($configFile)) {
+            require_once $configFile;
+            if(!empty($global['webSiteRootURL'])){
+                ?>
+                <div class="container">
+                    <h3 class="alert alert-success">
+                        <span class="glyphicon glyphicon-ok-circle"></span>
+                        Your system is installed, remove the <code><?php echo $global['systemRootPath']; ?>install</code> directory to continue
+                        <hr>
+                        <a href="<?php echo $global['webSiteRootURL']; ?>" class="btn btn-success btn-lg center-block">Go to the main page</a>
+                    </h3>
+                </div>
+                <?php
+            }
         } else {
+            file_put_contents('', $configFile);
+            if (!file_exists($configFile)) {
+                ?>
+                <div class="container">
+                    <h3 class="alert alert-error">
+                        <span class="glyphicon glyphicon-ok-circle"></span>
+                        We could not create your <code><?php echo getPathToApplication(); ?>configuration.php</code> file
+                        <hr>
+                        <code>touch <?php echo getPathToApplication(); ?>configuration.php && chmod 777 <?php echo getPathToApplication(); ?>configuration.php</code>
+                    </h3>
+                </div>
+                <?php
+            }
+        }
+        if (file_exists($configFile)) {
+            require_once $configFile;
+        }
+
+        if (empty($global['webSiteRootURL'])) {
             ?>
             <div class="container">
                 <img src="../view/img/logo.png" alt="Logo" class="img img-responsive center-block"/>
@@ -63,7 +86,7 @@ function getURLToApplication() {
                                         </button>
                                     </label>
                                     <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value="">https://encoder.avideo.com/
-https://encoder1.avideo.com/</textarea>
+        https://encoder1.avideo.com/</textarea>
                                 </div>
                             </div>
                             <div class="col-md-4">
