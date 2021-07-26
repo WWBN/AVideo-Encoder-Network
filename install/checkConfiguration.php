@@ -1,15 +1,26 @@
 <?php
 
-if (file_exists("../videos/configuration.php")) {
-    echo "Can not create configuration again";
-    error_log("Can not create configuration again: ".  json_encode($_SERVER));
-    exit;
-}
 header('Content-Type: application/json');
 
 $obj = new stdClass();
 $obj->post = $_POST;
 
+$confFile = "../videos/configuration.php";
+
+if (file_exists($confFile)) {
+    require_once $confFile;
+    if (!empty($global['webSiteRootURL'])) {
+        $obj->error = "Can not create configuration again";
+        error_log($obj->error . json_encode($_SERVER));
+        die(json_encode($obj));
+    }
+}
+
+if (!is_writable($configFile)) {
+    $obj->error = "{$configFile} must be writable";
+    error_log($obj->error);
+    die(json_encode($obj));
+}
 if (!file_exists($_POST['systemRootPath'] . "index.php")) {
     $obj->error = "Your system path to application ({$_POST['systemRootPath']}) is wrong";
     echo json_encode($obj);
