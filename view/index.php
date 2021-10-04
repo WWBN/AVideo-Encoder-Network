@@ -27,7 +27,14 @@ if (Login::isLogged()) {
     $streamer = new Streamer(Login::getStreamerId());
 }
 
-$bestEncoder = json_decode(file_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php"));
+$arrContextOptions=array(
+    "ssl"=>array(
+        "verify_peer"=>false,
+        "verify_peer_name"=>false,
+    ),
+);
+
+$bestEncoder = json_decode(file_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php", false, stream_context_create($arrContextOptions)));
 
 if (empty($bestEncoder)) {
     $bestEncoder = new stdClass();
