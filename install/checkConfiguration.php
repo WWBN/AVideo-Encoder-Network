@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 $obj = new stdClass();
 $obj->post = $_POST;
 
-$confFile = "configuration.php";
+$confFile = "{$_POST['systemRootPath']}configuration.php";
 
 if (file_exists($confFile)) {
     require_once $confFile;
