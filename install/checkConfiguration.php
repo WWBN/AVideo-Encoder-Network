@@ -16,8 +16,8 @@ if (file_exists($confFile)) {
     }
 }
 
-if (!is_writable($configFile)) {
-    $obj->error = "{$configFile} must be writable";
+if (!is_writable($confFile)) {
+    $obj->error = "{$confFile} must be writable";
     error_log($obj->error);
     die(json_encode($obj));
 }
