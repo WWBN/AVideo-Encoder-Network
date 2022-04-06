@@ -13,6 +13,8 @@ function getURLToApplication() {
 }
 
 $configFile = '../configuration.php';
+
+$defaultEncoders = array('https://encoder1.wwbn.net/', 'https://encoder2.wwbn.net/');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -23,9 +25,12 @@ $configFile = '../configuration.php';
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js" integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA==" crossorigin="anonymous"></script>
+        
+        <script src="https://tutorials.avideo.com/view/js/script.js" type="text/javascript" crossorigin="anonymous"></script>
+        <script src="https://tutorials.avideo.com/view/js/js-cookie/js.cookie.js" type="text/javascript" crossorigin="anonymous"></script>
     </head>
 
-    <body class="<?php echo $global['bodyClass']; ?>">
+    <body>
         <?php
         if (file_exists($configFile)) {
             require_once $configFile;
@@ -41,8 +46,8 @@ $configFile = '../configuration.php';
                 </div>
                 <?php
             }
-        } else {
-            file_put_contents('', $configFile);
+        } else if(!empty($configFile)){
+            file_put_contents($configFile, '');
             if (!file_exists($configFile)) {
                 ?>
                 <div class="container">
@@ -97,8 +102,7 @@ $configFile = '../configuration.php';
                                             <i class="glyphicon glyphicon-question-sign"></i>
                                         </button>
                                     </label>
-                                    <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value="">https://encoder.avideo.com/
-        https://encoder1.avideo.com/</textarea>
+                                    <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value=""><?php echo implode(PHP_EOL, $defaultEncoders); ?></textarea>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -237,9 +241,9 @@ $configFile = '../configuration.php';
                                     success: function (response) {
                                         modal.hidePleaseWait();
                                         if (response.error) {
-                                            swal("Sorry!", response.error, "error");
+                                            avideoAlertError(response.msg);
                                         } else {
-                                            swal("Congratulations!", response.error, "success");
+                                            avideoAlertSuccess(response.msg);
                                             window.location.reload(false);
                                         }
                                     },
