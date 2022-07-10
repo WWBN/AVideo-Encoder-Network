@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json');
 $config = dirname(__FILE__) . '/../configuration.php';
+require_once dirname(__FILE__) . '../objects/functions.php';
 require_once $config;
 
 $encoders = json_decode(url_get_contents("{$global['webSiteRootURL']}view/score.php"));
