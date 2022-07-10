@@ -1,6 +1,7 @@
 <?php
 require_once dirname(__FILE__) . '/../configuration.php';
 require_once dirname(__FILE__) . '/Streamer.php';
+require_once dirname(__FILE__) . '/functions.php';
 
 class Login
 {
