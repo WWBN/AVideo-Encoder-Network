@@ -80,7 +80,7 @@ function url_get_contents($Url, $ctx = "", $timeout = 0) {
         try {
             $tmp = @file_get_contents($Url, false, $context);
             if ($tmp != false) {
-                return remove_utf8_bom($tmp);
+                return ($tmp);
             }
         } catch (ErrorException $e) {
             try {
