@@ -17,7 +17,7 @@ $obj->download_status = array();
 
 $rows = Encoder::getAll();
 foreach ($rows as $value) {
-    $status = json_decode(file_get_contents($value['siteURL'] . 'status'));
+    $status = json_decode(url_get_contents($value['siteURL'] . 'status'));
     if (!empty($status)){
         $obj->encoderSiteURL[] = $value['siteURL'];
         $obj->queue_size[] = $status->queue_size;

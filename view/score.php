@@ -23,9 +23,9 @@ if ($fileAge > $lifetimeSeconds) {
     $site = array();
 
     foreach ($encoders as $value) {
-        $site[$value['id']]['ping'] = json_decode(file_get_contents("{$global['webSiteRootURL']}ping/{$value['id']}", false, $context));
+        $site[$value['id']]['ping'] = json_decode(url_get_contents("{$global['webSiteRootURL']}ping/{$value['id']}", $context));
         $site[$value['id']]['siteURL'] = $value['siteURL'];
-        $site[$value['id']]['serverStatus'] = json_decode(file_get_contents("{$value['siteURL']}serverStatus", false, $context));
+        $site[$value['id']]['serverStatus'] = json_decode(url_get_contents("{$value['siteURL']}serverStatus", $context));
     }
 
     $content = json_encode($site);
@@ -33,7 +33,7 @@ if ($fileAge > $lifetimeSeconds) {
     file_put_contents($file, $content);
 
 } else {
-    $content = file_get_contents($file);
+    $content = url_get_contents($file);
 }
 
 echo $content;

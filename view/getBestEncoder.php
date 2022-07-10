@@ -3,7 +3,7 @@ header('Content-Type: application/json');
 $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
 
-$encoders = json_decode(file_get_contents("{$global['webSiteRootURL']}view/score.php"));
+$encoders = json_decode(url_get_contents("{$global['webSiteRootURL']}view/score.php"));
 
 $bestEncoder = array('id' => 0, 'ping' => 9999, 'queue_size' => 9999, 'concurrent' => 1, 'memFreeBytes' => 0);
 

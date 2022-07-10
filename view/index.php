@@ -34,7 +34,7 @@ $arrContextOptions=array(
     ),
 );
 
-$bestEncoder = json_decode(file_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php", false, stream_context_create($arrContextOptions)));
+$bestEncoder = json_decode(url_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php", stream_context_create($arrContextOptions)));
 
 if (empty($bestEncoder)) {
     $bestEncoder = new stdClass();

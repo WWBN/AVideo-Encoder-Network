@@ -34,7 +34,7 @@ class Login
 
         $context = stream_context_create($opts);
 
-        $result = @file_get_contents($aVideoURL . 'login', false, $context);
+        $result = @url_get_contents($aVideoURL . 'login', $context);
         if (empty($result)) {
             $object = new stdClass();
             $object->streamer = false;
