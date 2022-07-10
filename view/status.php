@@ -3,6 +3,7 @@ header('Access-Control-Allow-Origin: *');
 header('Content-Type: application/json');
 require_once dirname(__FILE__) . '/../configuration.php';
 require_once '../objects/Encoder.php';
+require_once $global['systemRootPath'] . 'objects/functions.php';
 
 $obj = new stdClass();
 $obj->queue_size = array();

@@ -3,6 +3,7 @@ header('Content-Type: application/json');
 $config = dirname(__FILE__) . '/../configuration.php';
 require_once $config;
 require_once '../objects/Encoder.php';
+require_once dirname(__FILE__) . '/../objects/functions.php';
 
 $opts = array('http' =>
   array( 'timeout' => 1 )
