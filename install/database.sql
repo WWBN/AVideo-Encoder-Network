@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `streamers` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `siteURL` VARCHAR(255) NOT NULL,
   `user` VARCHAR(45) NOT NULL,
-  `pass` VARCHAR(45) NOT NULL,
+  `pass` VARCHAR(255) NOT NULL,
   `created` DATETIME NULL,
   `modified` DATETIME NULL,
   PRIMARY KEY (`id`))

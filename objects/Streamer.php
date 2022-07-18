@@ -1,8 +1,7 @@
 <?php
 
 
-class Streamer extends ObjectYPT
-{
+class Streamer extends ObjectYPT{
 
     protected $id, $siteURL, $user, $pass, $created, $modified;
 
@@ -128,6 +127,28 @@ class Streamer extends ObjectYPT
     function setModified($modified)
     {
         $this->modified = $modified;
+    }
+
+    private function updatePassFieldIfNeed(){
+        global $global, $mysqlDatabase;
+        $sql = "SELECT CHARACTER_MAXIMUM_LENGTH FROM information_schema.COLUMNS 
+        WHERE TABLE_SCHEMA = '{$mysqlDatabase}' AND TABLE_NAME = 'streamers' AND COLUMN_NAME = 'pass'";
+
+        $res = $global['mysqli']->query($sql);
+        $row = ($res) ? $res->fetch_assoc() : false;
+        if(!empty($row)){
+            if($row['CHARACTER_MAXIMUM_LENGTH'] < 250){
+                $sql2 = 'ALTER TABLE `streamers` 
+                CHANGE COLUMN `pass` `pass` VARCHAR(255) NOT NULL;';
+
+                $insert_row = $global['mysqli']->query($sql2);
+            }
+        }
+    }
+
+    function save(){
+        $this->updatePassFieldIfNeed();
+        return parent::save();
     }
 
 }
