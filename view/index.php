@@ -280,31 +280,41 @@ $encoders = Encoder::getAll();
 
                 }
             }
-
             async function pingJS(id, siteURL) {
                 const start = new Date().getTime();
-                var timeOut = 60000; // 2 min
+                var timeOut = 60000; // Set initial timeout to 1 minute
+                const controller = new AbortController(); // Create a new instance for this request
+                const timeoutId = setTimeout(() => controller.abort(), timeOut); // Set the timeout
+
                 try {
                     const response = await fetch(siteURL, {
-                        // Optional: Include mode and credentials if needed for CORS requests
                         mode: 'no-cors',
-                        // Optional: Set a specific timeout for the request
-                        // credentials: 'include',
+                        signal: controller.signal // Attach the signal to the request
                     });
+                    clearTimeout(timeoutId); // Clear the timeout since the fetch was successful
+
                     const end = new Date().getTime();
                     const ms = end - start;
                     addData(id, ms);
-                    $('#ping' + id).text("Ping: " + ms + " ms");
-                    timeOut = 10000;
+                    $('#ping' + id).text("Ping: " + ms + "ms");
+                    timeOut = 10000; // Set new timeout for the next ping
                 } catch (e) {
-                    console.error(`Error pinging ${url}:`, e);
+                    clearTimeout(timeoutId); // Clear the timeout since the fetch has concluded (either success or error)
+
+                    // Handle fetch errors, including aborts
+                    if (e.name === 'AbortError') {
+                        console.error(`Ping to ${siteURL} timed out:`, e);
+                        $('#ping' + id).text("Ping: Timeout");
+                    } else {
+                        console.error(`Error pinging ${siteURL}:`, e);
+                    }
                 }
+
+                // Set the next ping
                 setTimeout(function() {
                     pingJS(id, siteURL);
                 }, timeOut);
             }
-
-
 
             async function pingPHP(id) {
                 $.ajax({
