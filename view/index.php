@@ -418,7 +418,10 @@ $encoders = Encoder::getAll();
                         },
                         options: {
                             legend: {
-                                display: false
+                                display: false // This should hide the legend (the label rectangle at the top)
+                            },
+                            tooltips: {
+                                enabled: false // This should hide tooltips which can also appear as rectangles
                             },
                             responsive: true,
                             scales: {
@@ -436,6 +439,7 @@ $encoders = Encoder::getAll();
                                 }]
                             }
                         }
+
                     });
 
                     pingJS(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>');
