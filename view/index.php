@@ -188,8 +188,8 @@ $encoders = Encoder::getAll();
         </script>
     <?php
     } else {
+        include 'navbar.php';
     ?>
-
         <div class="container-fluid"> <!-- style="overflow:hidden" -->
             <div class="row">
                 <div class="col-md-12" style="overflow:auto">
