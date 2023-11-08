@@ -417,6 +417,15 @@ $encoders = Encoder::getAll();
                             }]
                         },
                         options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: false,
+                                }
+                            },
                             legend: {
                                 display: false // This should hide the legend (the label rectangle at the top)
                             },
