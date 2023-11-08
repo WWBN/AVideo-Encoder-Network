@@ -97,16 +97,28 @@ $mysqli->close();
 $content = "<?php
 \$global['disableAdvancedConfigurations'] = 0;
 \$global['videoStorageLimitMinutes'] = 0;
-//\$global['webSiteRootURL'] = '{$_POST['webSiteRootURL']}';
-// get the subdirectory, if exists
 
-\$DOCUMENT_ROOT = str_replace('/',DIRECTORY_SEPARATOR,\$_SERVER[\"DOCUMENT_ROOT\"]);
-\$subDir = str_replace(array(\$DOCUMENT_ROOT, 'configuration.php'), array('',''), __FILE__);
-\$global['webSiteRootURL'] = \"http\".(!empty(\$_SERVER['HTTPS'])?\"s\":\"\").\"://\".\$_SERVER['SERVER_NAME'].\$subDir;
-\$global['webSiteRootURL'] = str_replace('\\\','/',\$global['webSiteRootURL']);
+// Get the HTTP/HTTPS scheme
+\$scheme = 'http' . (!empty(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS'] !== 'off' ? 's' : '');
+
+// Get the server name
+\$serverName = \$_SERVER['SERVER_NAME'];
+
+// Get the server port
+\$serverPort = \$_SERVER['SERVER_PORT'];
+
+// Check if the port is a standard port (80 for HTTP, 443 for HTTPS) to decide whether to include it in the URL
+\$includePort = \$serverPort !== '80' && \$serverPort !== '443';
+
+// Get the subdirectory, if exists
+\$DOCUMENT_ROOT = str_replace('/', DIRECTORY_SEPARATOR, \$_SERVER['DOCUMENT_ROOT']);
+\$subDir = str_replace(array(\$DOCUMENT_ROOT, 'configuration.php'), array('', ''), __FILE__);
+\$subDir = str_replace('\\\','/', \$subDir); // Ensure forward slashes
+
+// Construct the webSiteRootURL with or without port
+\$global['webSiteRootURL'] = \$scheme . '://' . \$serverName . (\$includePort ? ':' . \$serverPort : '') . \$subDir;
 
 \$global['systemRootPath'] = '{$_POST['systemRootPath']}';
-
 
 \$mysqlHost = '{$_POST['databaseHost']}';
 \$mysqlPort = '{$_POST['databasePort']}';

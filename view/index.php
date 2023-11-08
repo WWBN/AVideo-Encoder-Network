@@ -34,6 +34,7 @@ $arrContextOptions = array(
     ),
 );
 
+//var_dump(__LINE__, "{$global['webSiteRootURL']}view/getBestEncoder.php",  $serverPort !== '80' && $serverPort !== '443');exit;
 $bestEncoder = json_decode(url_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php", stream_context_create($arrContextOptions)));
 
 if (empty($bestEncoder)) {
@@ -205,14 +206,23 @@ $encoders = Encoder::getAll();
                                     <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
                                         <div class="ellipsis">
                                             <span class="account-type"><?php echo $value['name']; ?></span>
-                                            <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;"><i class="fa fa-check"></i> Recommended</span><br />
-                                            <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span> <span class="account-amount" id="queuesize<?php echo $value['id']; ?>">Queue Size 0 </span> / <span class="account-amount" id="concurrent<?php echo $value['id']; ?>">Concurrent 1 </span> <br />
-                                            <a href="<?php echo $value['siteURL']; ?>" class="account-link"><?php
-                                                                                                            $parts = parse_url($value['siteURL']);
-                                                                                                            echo $parts["host"];
-                                                                                                            ?></a><br>
-                                            <span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
-                                            <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
+                                            <div class="clearfix"></div>
+                                            <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;">
+                                                <i class="fa fa-check"></i> Recommended
+                                            </span>
+                                            <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span>
+                                                <div class="clearfix hidden-xs"></div>
+                                                <span class="account-amount" id="queuesize<?php echo $value['id']; ?>">Queue Size 0 </span> / <span class="account-amount" id="concurrent<?php echo $value['id']; ?>">Concurrent 1 </span>
+                                                <div class="clearfix"></div>
+                                                <a href="<?php echo $value['siteURL']; ?>" class="account-link">
+                                                    <?php
+                                                    $parts = parse_url($value['siteURL']);
+                                                    echo $parts["host"];
+                                                    ?>
+                                                </a>
+                                                <div class="clearfix  hidden-xs"></div>
+                                                <span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
+                                                <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
                                         </div>
 
                                     </div>
@@ -233,8 +243,7 @@ $encoders = Encoder::getAll();
                                                         ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" 
-                                            siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="30"></canvas>
+                                            <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="30"></canvas>
                                         </div>
                                         <div class="col-sm-12" style="min-height: 70vh;">
                                             <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100vh;width:100%;" height="100%" width="100%"></iframe>
