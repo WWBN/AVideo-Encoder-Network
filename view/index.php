@@ -444,6 +444,12 @@ $encoders = Encoder::getAll();
                                     display: true,
                                     scaleLabel: {
                                         display: false
+                                    },
+                                    ticks: {
+                                        beginAtZero: true,
+                                        min: 0, // Minimum value of y-axis
+                                        max: 1000, // Maximum value of y-axis
+                                        stepSize: 100,
                                     }
                                 }]
                             }
