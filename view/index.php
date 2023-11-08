@@ -76,44 +76,7 @@ $encoders = Encoder::getAll();
     <link href="<?php echo $streamerURL; ?>view/theme.css.php" rel="stylesheet" type="text/css" />
 
 
-    <style>
-        /* Custom styles to center the logo in the middle of the navbar */
-        .navbar-header {
-            float: none;
-        }
 
-        .navbar-toggle {
-            display: none;
-        }
-
-        .navbar-collapse {
-            text-align: center;
-        }
-
-        .navbar-brand {
-            float: none;
-            display: inline-block;
-            /* Adjust padding as per the logo size */
-        }
-
-        .navbar-nav {
-            float: none;
-            display: inline-block;
-            vertical-align: top;
-        }
-
-        .navbar-nav>li {
-            display: inline-block;
-        }
-
-        .navbar-right {
-            float: right !important;
-        }
-
-        .navbar-left {
-            float: left !important;
-        }
-    </style>
 
 </head>
 
