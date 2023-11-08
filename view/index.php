@@ -283,7 +283,7 @@ $encoders = Encoder::getAll();
 
             async function pingJS(id, siteURL) {
                 const start = new Date().getTime();
-                var timeOut = 120000; // 2 min
+                var timeOut = 60000; // 2 min
                 try {
                     const response = await fetch(siteURL, {
                         // Optional: Include mode and credentials if needed for CORS requests
@@ -293,9 +293,9 @@ $encoders = Encoder::getAll();
                     });
                     const end = new Date().getTime();
                     const ms = end - start;
-                    timeOut = 30000;
                     addData(id, ms);
                     $('#ping' + id).text("Ping: " + ms + " ms");
+                    timeOut = 10000;
                 } catch (e) {
                     console.error(`Error pinging ${url}:`, e);
                 }
