@@ -233,7 +233,8 @@ $encoders = Encoder::getAll();
                                                         ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
                                     <div class="row">
                                         <div class="col-sm-12">
-                                            <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="60"></canvas>
+                                            <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" 
+                                            siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="30"></canvas>
                                         </div>
                                         <div class="col-sm-12" style="min-height: 70vh;">
                                             <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100vh;width:100%;" height="100%" width="100%"></iframe>
