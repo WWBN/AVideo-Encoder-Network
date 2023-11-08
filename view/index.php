@@ -75,9 +75,6 @@ $encoders = Encoder::getAll();
     <link href="<?php echo $streamerURL; ?>view/css/main.css" rel="stylesheet" crossorigin="anonymous">
     <link href="<?php echo $streamerURL; ?>view/theme.css.php" rel="stylesheet" type="text/css" />
 
-
-
-
 </head>
 
 <body>

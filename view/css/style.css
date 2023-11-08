@@ -283,7 +283,7 @@ div.bottom-rounded {
 .tabs-left > .nav-tabs .active > div:hover,
 .tabs-left > .nav-tabs .active > div:focus{
     border-color: #ddd transparent #ddd #ddd;
-    *border-right-color: #ffffff;
+    border-right-color: #ffffff;
 }
 /** Let tabls-left class be available in bootstrap 3.3.7 - F **/
 
@@ -468,4 +468,12 @@ li.active .account-type {
     font-weight: bold;
     line-height: 0.9em;
     display: block;
+}
+
+#networkNavbar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
 }
