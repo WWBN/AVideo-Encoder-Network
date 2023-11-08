@@ -59,8 +59,8 @@ $encoders = Encoder::getAll();
         <meta name="msapplication-TileImage" content="<?php echo $streamerURL; ?>videos/favicon.png">
 
         <link href="<?php echo $streamerURL; ?>node_modules/fontawesome-free/css/all.min.css?cache=1657045557_1657045557"" rel="stylesheet" crossorigin="anonymous">
-        <script src="<?php echo $streamerURL; ?>view/js/jquery-3.5.1.min.js" type="text/javascript"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+        <script src="<?php echo $streamerURL; ?>node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
+        <script src="<?php echo $streamerURL; ?>node_modules/chart.js/dist/chart.umd.js"></script>
         
         <script src="<?php echo $streamerURL; ?>view/js/script.js" type="text/javascript"></script>
         <link href="<?php echo $streamerURL; ?>view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
@@ -71,7 +71,7 @@ $encoders = Encoder::getAll();
         <script src="<?php echo $global['webSiteRootURL']; ?>view/js/main.js?<?php echo filectime($global['systemRootPath'] . "view/js/main.js"); ?>" type="text/javascript"></script>
         <link href="<?php echo $global['webSiteRootURL']; ?>view/css/style.css?<?php echo filectime($global['systemRootPath'] . "view/css/style.css"); ?>" rel="stylesheet" type="text/css"/>
         
-        <link href="<?php echo $streamerURL; ?>view/css/main.css"" rel="stylesheet" crossorigin="anonymous">
+        <link href="<?php echo $streamerURL; ?>view/css/main.css" rel="stylesheet" crossorigin="anonymous">
         <link href="<?php echo $streamerURL; ?>view/theme.css.php" rel="stylesheet" type="text/css"/>
         
         
