@@ -11,7 +11,7 @@
 
         <ul class="nav navbar-nav navbar-right">
             <!-- Logoff button on the right -->
-            <li><a href="<?php echo "{$global['webSiteRootURL']}logoff"; ?>">Logoff</a></li>
+            <li><a href="<?php echo "{$global['webSiteRootURL']}logoff"; ?>" class="btn btn-default"><i class="fa-solid fa-right-from-bracket"></i> Logoff</a></li>
         </ul>
     </div><!-- /.container-fluid -->
 </nav>
