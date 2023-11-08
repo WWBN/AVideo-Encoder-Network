@@ -59,14 +59,14 @@ $encoders = Encoder::getAll();
     <link rel="shortcut icon" href="<?php echo $streamerURL; ?>videos/favicon.ico" sizes="16x16,24x24,32x32,48x48,144x144">
     <meta name="msapplication-TileImage" content="<?php echo $streamerURL; ?>videos/favicon.png">
 
-    <link href="<?php echo $streamerURL; ?>node_modules/fontawesome-free/css/all.min.css?cache=1657045557_1657045557"" rel=" stylesheet" crossorigin="anonymous">
+    <link href="<?php echo $streamerURL; ?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel=" stylesheet" crossorigin="anonymous">
     <script src="<?php echo $streamerURL; ?>node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
     <script src="<?php echo $streamerURL; ?>node_modules/chart.js/dist/chart.umd.js"></script>
 
     <script src="<?php echo $streamerURL; ?>view/js/script.js" type="text/javascript"></script>
     <link href="<?php echo $streamerURL; ?>view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <script src="<?php echo $streamerURL; ?>view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="<?php echo $streamerURL; ?>view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
+    <script src="<?php echo $streamerURL; ?>node_modules/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
     <script src="<?php echo $streamerURL; ?>node_modules/js-cookie/dist/js.cookie.js" type="text/javascript"></script>
 
     <script src="<?php echo $global['webSiteRootURL']; ?>view/js/main.js?<?php echo filectime($global['systemRootPath'] . "view/js/main.js"); ?>" type="text/javascript"></script>
