@@ -288,7 +288,6 @@ $encoders = Encoder::getAll();
                 }
             }
             async function pingJS(id, siteURL) {
-                return 0;
                 const start = new Date().getTime();
                 var timeOut = 60000; // Set initial timeout to 1 minute
                 const controller = new AbortController(); // Create a new instance for this request
@@ -359,7 +358,6 @@ $encoders = Encoder::getAll();
             var getEncoderTimout = [];
 
             function getEncoder(id, siteURL) {
-                return 0;
                 clearTimeout(getEncoderTimout[id]);
                 $.ajax({
                     url: siteURL + 'serverStatus',
@@ -408,7 +406,7 @@ $encoders = Encoder::getAll();
             }
 
             $(document).ready(function() {
-                //getBestEncoder();
+                getBestEncoder();
 
                 <?php
                 foreach ($encoders as $value) {

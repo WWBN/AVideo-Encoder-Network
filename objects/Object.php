@@ -94,7 +94,7 @@ abstract class ObjectYPT
         } else {
             $_POST['current'] = 0;
             $_POST['rowCount'] = 0;
-            $sql .= " LIMIT 50 ";
+            $sql .= " LIMIT 1 ";
         }
         return $sql;
     }
