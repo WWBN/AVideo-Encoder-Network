@@ -408,7 +408,7 @@ $encoders = Encoder::getAll();
             }
 
             $(document).ready(function() {
-                getBestEncoder();
+                //getBestEncoder();
 
                 <?php
                 foreach ($encoders as $value) {
