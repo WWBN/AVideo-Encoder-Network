@@ -464,7 +464,7 @@ $encoders = Encoder::getAll();
 
                     });
 
-                    pingJS(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>');
+                    pingJS(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>view/img/favicon.ico');
                     getEncoder(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>');
 
                 <?php
