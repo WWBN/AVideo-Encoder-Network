@@ -3,3 +3,5 @@
 /_configuration.php
 /__configuration.php
 /cache/
+/.installer.lock
+/.configuration-*.php

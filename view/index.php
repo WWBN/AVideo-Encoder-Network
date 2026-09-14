@@ -1,510 +1,106 @@
 <?php
-$config = dirname(__FILE__) . '/../configuration.php';
-if (!file_exists($config)) {
-    header("Location: install/index.php");
+$config = dirname(__DIR__) . '/configuration.php';
+if (!is_file($config) || !filesize($config)) {
+    require_once dirname(__DIR__) . '/install/installer.php';
+    header('Location: ' . installerURL() . 'install/index.php');
     exit;
 }
 require_once $config;
-if (empty($global['webSiteRootURL'])) {
-    header("Location: install/index.php");
-    exit;
+require_once dirname(__DIR__) . '/objects/Streamer.php';
+require_once dirname(__DIR__) . '/objects/Login.php';
+require_once dirname(__DIR__) . '/objects/functions.php';
+require_once dirname(__DIR__) . '/objects/Encoder.php';
+header('Cache-Control: no-store');
+header('Referrer-Policy: no-referrer');
+function networkEscape($value) { return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8'); }
+function networkURL($value) {
+    return is_string($value) && filter_var($value, FILTER_VALIDATE_URL) && in_array(strtolower(parse_url($value, PHP_URL_SCHEME) ?? ''), ['http', 'https'], true) ? addLastSlash($value) : '';
 }
-require_once '../objects/Streamer.php';
-require_once '../objects/Login.php';
-require_once '../objects/functions.php';
-require_once $global['systemRootPath'] . 'objects/Encoder.php';
-
-$streamerURL = @$_REQUEST['webSiteRootURL'];
-
-if (!empty($_REQUEST['webSiteRootURL']) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass']) && empty($_REQUEST['justLogin'])) {
-    Login::logoff();
+$streamerURL = networkURL($_REQUEST['webSiteRootURL'] ?? '');
+if ($streamerURL && !empty($_REQUEST['user']) && !empty($_REQUEST['pass']) && empty($_REQUEST['justLogin'])) { Login::logoff(); }
+if (!$streamerURL) { $streamerURL = networkURL(Streamer::getFirstURL()); }
+$loggedIn = Login::canUpload();
+$site = $loggedIn ? networkURL(Login::getStreamerURL()) : $streamerURL;
+$siteHost = parse_url($site, PHP_URL_HOST) ?: 'Video site';
+$base = $global['webSiteRootURL'];
+$encoders = [];
+if ($loggedIn) {
+    foreach (Encoder::getAll() as $row) {
+        $url = networkURL($row['siteURL']);
+        $launchURL = $url ? $url . '?' . http_build_query(['noNavbar' => 1, 'webSiteRootURL' => $site,
+            'user' => $_SESSION['login']->user ?? '', 'pass' => $_SESSION['login']->pass ?? '', 'encodedPass' => 'true']) : '';
+        $encoders[] = ['id' => (int) $row['id'], 'name' => $row['name'] ?: (parse_url($url, PHP_URL_HOST) ?: 'Encoder'),
+            'url' => $url, 'host' => parse_url($url, PHP_URL_HOST) ?: 'Invalid URL', 'description' => $row['description'] ?? '', 'launchURL' => $launchURL];
+    }
 }
-
-if (empty($streamerURL)) {
-    $streamerURL = Streamer::getFirstURL();
-}
-if (Login::isLogged()) {
-    $streamer = new Streamer(Login::getStreamerId());
-}
-
-$arrContextOptions = array(
-    "ssl" => array(
-        "verify_peer" => false,
-        "verify_peer_name" => false,
-    ),
-);
-
-//var_dump(__LINE__, "{$global['webSiteRootURL']}view/getBestEncoder.php",  $serverPort !== '80' && $serverPort !== '443');exit;
-$bestEncoder = json_decode(url_get_contents("{$global['webSiteRootURL']}view/getBestEncoder.php", stream_context_create($arrContextOptions)));
-
-if (empty($bestEncoder)) {
-    $bestEncoder = new stdClass();
-    $bestEncoder->id = 0;
-}
-
-$encoders = Encoder::getAll();
+$autoLogin = !$loggedIn && $streamerURL && !empty($_REQUEST['user']) && !empty($_REQUEST['pass']);
+$bootstrap = ['base' => $base, 'encoders' => $encoders, 'autoLogin' => (bool) $autoLogin];
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Monitor your encoder network, compare server capacity, and open your encoding workspace.">
     <title>Encoder Network</title>
-
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo $streamerURL; ?>videos/favicon.png">
-    <link rel="icon" type="image/png" href="<?php echo $streamerURL; ?>videos/favicon.png">
-    <link rel="shortcut icon" href="<?php echo $streamerURL; ?>videos/favicon.ico" sizes="16x16,24x24,32x32,48x48,144x144">
-    <meta name="msapplication-TileImage" content="<?php echo $streamerURL; ?>videos/favicon.png">
-
-    <link href="<?php echo $streamerURL; ?>node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel=" stylesheet" crossorigin="anonymous">
-    <script src="<?php echo $streamerURL; ?>node_modules/jquery/dist/jquery.min.js" type="text/javascript"></script>
-    <script src="<?php echo $streamerURL; ?>node_modules/chart.js/dist/chart.umd.js"></script>
-
-    <script src="<?php echo $streamerURL; ?>view/js/script.js" type="text/javascript"></script>
-    <link href="<?php echo $streamerURL; ?>view/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <script src="<?php echo $streamerURL; ?>view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="<?php echo $streamerURL; ?>node_modules/sweetalert/dist/sweetalert.min.js" type="text/javascript"></script>
-    <script src="<?php echo $streamerURL; ?>node_modules/js-cookie/dist/js.cookie.js" type="text/javascript"></script>
-
-    <script src="<?php echo $global['webSiteRootURL']; ?>view/js/main.js?<?php echo filectime($global['systemRootPath'] . "view/js/main.js"); ?>" type="text/javascript"></script>
-    <link href="<?php echo $global['webSiteRootURL']; ?>view/css/style.css?<?php echo filectime($global['systemRootPath'] . "view/css/style.css"); ?>" rel="stylesheet" type="text/css" />
-
-    <link href="<?php echo $streamerURL; ?>view/css/main.css" rel="stylesheet" crossorigin="anonymous">
-    <link href="<?php echo $streamerURL; ?>view/theme.css.php" rel="stylesheet" type="text/css" />
-
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="<?= networkEscape($base) ?>view/css/style.css?v=<?= filemtime(__DIR__ . '/css/style.css') ?>">
+    <script id="networkConfig" type="application/json"><?= json_encode($bootstrap, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_INVALID_UTF8_SUBSTITUTE) ?></script>
+    <script src="<?= networkEscape($base) ?>view/js/main.js?v=<?= filemtime(__DIR__ . '/js/main.js') ?>" defer></script>
 </head>
-
 <body>
-    <?php
-    if (!Login::canUpload()) {
-    ?>
-        <div class="row">
-            <div class="col-xs-1 col-md-2"></div>
-            <div class="col-xs-10 col-md-8 ">
-                <form class="form-compact well form-horizontal" id="loginForm">
-                    <fieldset>
-                        <legend>Please sign in</legend>
-
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Streamer Site</label>
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                    <input id="siteURL" placeholder="http://www.your-tube-site.com" class="form-control" type="url" value="<?php echo $streamerURL; ?>" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">User</label>
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                    <input id="inputUser" placeholder="User" class="form-control" type="text" value="<?php echo @$_REQUEST['user']; ?>" required>
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Password</label>
-                            <div class="col-md-8 inputGroupContainer">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                    <input id="inputPassword" placeholder="Password" class="form-control" type="password" value="<?php echo @$_REQUEST['pass']; ?>">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Button -->
-                        <div class="form-group">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-success  btn-block" id="mainButton"><span class="fa fa-sign-in"></span> Sign in</button>
-                            </div>
-                        </div>
-                    </fieldset>
-
-                </form>
-            </div>
-            <div class="col-xs-1 col-md-2"></div>
-        </div>
-        <script>
-            var encodedPass = <?php
-                                // if pass all parameters submit the form
-                                echo (!empty($streamerURL) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass'])) ? 'true' : 'false';
-                                ?>;
-            $(document).ready(function() {
-                $('#loginForm').submit(function(evt) {
-                    evt.preventDefault();
-                    modal.showPleaseWait();
-                    $.ajax({
-                        url: 'login',
-                        data: {
-                            "user": $('#inputUser').val(),
-                            "pass": $('#inputPassword').val(),
-                            "siteURL": $('#siteURL').val(),
-                            "encodedPass": encodedPass
-                        },
-                        type: 'post',
-                        success: function(response) {
-                            if (response.error) {
-                                modal.hidePleaseWait();
-                                swal("Sorry!", response.error, "error");
-                            } else
-                            if (!response.streamer) {
-                                modal.hidePleaseWait();
-                                swal("Sorry!", "We could not found your streamer site!", "error");
-                            } else if (!response.isLogged) {
-                                modal.hidePleaseWait();
-                                swal("Sorry!", "Your user or password is wrong!", "error");
-                            } else {
-                                var url = new URL(document.location);
-                                url.searchParams.append('justLogin', 1);
-                                if (typeof response.PHPSESSID !== 'undefined' && response.PHPSESSID) {
-                                    url.searchParams.append('PHPSESSID', response.PHPSESSID);
-                                }
-                                document.location = url;
-                            }
-                        }
-                    });
-                    return false;
-                });
-                $('#inputPassword').keyup(function() {
-                    encodedPass = false;
-                });
-                <?php
-                // if pass all parameters submit the form
-                if (!empty($streamerURL) && !empty($_REQUEST['user']) && !empty($_REQUEST['pass'])) {
-                    echo '$(\'#loginForm\').submit()';
-                }
-                ?>
-
-            });
-        </script>
-    <?php
-    } else {
-        include 'navbar.php';
-    ?>
-        <div class="container-fluid"> <!-- style="overflow:hidden" -->
-            <div class="row">
-                <div class="col-md-12" style="overflow:auto">
-                    <div id="MyAccountsTab" class="tabbable tabs-left">
-                        <!-- Account selection for desktop - I -->
-                        <ul class="nav nav-tabs col-md-2 col-sm-3" style="z-index: 2; ">
-                            <?php
-                            foreach ($encoders as $value) {
-                            ?>
-
-                                <li <?php
-                                    if ($bestEncoder->id == $value['id']) {
-                                        echo 'class="active"';
-                                    }
-                                    ?> style="cursor: pointer;">
-                                    <div data-target="#l<?php echo $value['id']; ?>" data-toggle="tab">
-                                        <div class="ellipsis">
-                                            <span class="account-type"><?php echo $value['name']; ?></span>
-                                            <div class="clearfix"></div>
-                                            <span id="recommended<?php echo $value['id']; ?>" class="label label-success recommended" style="display: none;">
-                                                <i class="fa fa-check"></i> Recommended
-                                            </span>
-                                            <span id="label<?php echo $value['id']; ?>" class="label label-danger">Offline</span>
-                                                <div class="clearfix hidden-xs"></div>
-                                                <span class="account-amount" id="queuesize<?php echo $value['id']; ?>">Queue Size 0 </span> / <span class="account-amount" id="concurrent<?php echo $value['id']; ?>">Concurrent 1 </span>
-                                                <div class="clearfix"></div>
-                                                <a href="<?php echo $value['siteURL']; ?>" class="account-link">
-                                                    <?php
-                                                    $parts = parse_url($value['siteURL']);
-                                                    echo $parts["host"];
-                                                    ?>
-                                                </a>
-                                                <div class="clearfix  hidden-xs"></div>
-                                                <span id="ping<?php echo $value['id']; ?>" class="label label-default">Searching Ping ...</span>
-                                                <span id="maxfilesize<?php echo $value['id']; ?>" class="label label-default">Max File Size 0Mb</span>
-                                        </div>
-
-                                    </div>
-                                </li>
-
-                            <?php
-                            }
-                            ?>
-                        </ul>
-                        <div class="tab-content col-md-10 col-sm-9">
-                            <?php
-                            foreach ($encoders as $value) {
-                            ?>
-                                <div class="tab-pane <?php
-                                                        if ($bestEncoder->id == $value['id']) {
-                                                            echo 'active';
-                                                        }
-                                                        ?>" id="l<?php echo $value['id']; ?>"><!--style="padding-left: 60px; padding-right:100px"-->
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <canvas id="canvas<?php echo $value['id']; ?>" rowId="<?php echo $value['id']; ?>" siteURL="<?php echo $value['siteURL']; ?>" class="ping" height="30"></canvas>
-                                        </div>
-                                        <div class="col-sm-12" style="min-height: 70vh;">
-                                            <iframe src="<?php echo $value['siteURL']; ?>?noNavbar=1&webSiteRootURL=<?php echo urlencode($_SESSION["login"]->streamer); ?>&user=<?php echo $_SESSION["login"]->user; ?>&pass=<?php echo $_SESSION["login"]->pass; ?>" frameborder="0" style="overflow:hidden;height:100vh;width:100%;" height="100%" width="100%"></iframe>
-                                        </div>
-                                    </div>
-                                </div>
-                            <?php
-                            }
-                            ?>
-                        </div>
-                    </div>
+<div class="app-shell">
+    <aside class="sidebar">
+        <div class="nav-caption">WORKSPACE</div>
+        <nav aria-label="Main navigation">
+            <a class="nav-item active" href="#overview" aria-current="page"><span class="nav-symbol" aria-hidden="true">▦</span> Overview</a>
+            <?php if ($loggedIn): ?>
+            <a class="nav-item" href="#encoders"><span class="nav-symbol" aria-hidden="true">▤</span> Encoders <span class="nav-count"><?= count($encoders) ?></span></a>
+            <a class="nav-item" href="#guide"><span class="nav-symbol" aria-hidden="true">ⓘ</span> Network guide</a>
+            <?php endif; ?>
+        </nav>
+    </aside>
+    <div class="main-shell">
+        <header class="topbar"><div class="breadcrumbs">Workspace <span>/</span> <strong><?= $loggedIn ? 'Network overview' : 'Sign in' ?></strong></div><div class="account"><span class="avatar"><?= networkEscape(strtoupper(substr($siteHost, 0, 1))) ?></span><div><strong><?= networkEscape($siteHost) ?></strong><small><?= $loggedIn ? (Login::isAdmin() ? 'Administrator' : 'Uploader') : 'Connected platform' ?></small></div><?php if ($loggedIn): ?><a class="signout" href="<?= networkEscape($base) ?>logoff" title="Sign out" aria-label="Sign out">↗</a><?php endif; ?></div></header>
+        <main id="overview">
+        <?php if (!$loggedIn): ?>
+            <section class="login-layout"><div><div class="eyebrow">YOUR ENCODING WORKSPACE</div><h1>Encoding workspace</h1><p class="lead">Sign in with your account to compare encoders, check capacity, and start your next upload.</p><div class="login-features"><span>✓ Live server status</span><span>✓ Capacity at a glance</span><span>✓ Integrated encoding workspace</span></div></div><form id="loginForm" class="panel login-form"><span class="eyebrow">WELCOME BACK</span><h2>Sign in to your network</h2><p>Use an account with upload access.</p><label for="siteURL">Video site URL</label><input id="siteURL" type="url" value="<?= networkEscape($streamerURL) ?>" required placeholder="https://videos.example.com/"><label for="inputUser">Username</label><input id="inputUser" autocomplete="username" value="<?= networkEscape(is_string($_REQUEST['user'] ?? '') ? ($_REQUEST['user'] ?? '') : '') ?>" required><label for="inputPassword">Password</label><input id="inputPassword" type="password" autocomplete="current-password" value="<?= networkEscape(is_string($_REQUEST['pass'] ?? '') ? ($_REQUEST['pass'] ?? '') : '') ?>" required><p id="loginError" class="error-message" role="alert" hidden></p><button class="button primary" type="submit">Sign in <span aria-hidden="true">→</span></button></form></section>
+        <?php else: ?>
+            <div class="page-heading"><div><div class="eyebrow">YOUR INFRASTRUCTURE, AT A GLANCE</div><h1>Encoder overview<span class="heading-dot">.</span></h1><p>View encoder availability, capacity, and queues.</p></div><div class="heading-actions"><span id="refreshStatus" class="refresh-label" role="status">Waiting for first check</span><button id="refreshButton" class="button secondary"><span aria-hidden="true">↻</span> Refresh status</button></div></div>
+            <div id="globalError" class="notice danger" role="alert" hidden></div>
+            <section class="summary-grid" aria-label="Network summary">
+                <article class="stat-card"><div class="stat-label">Available encoders <span class="stat-icon" aria-hidden="true">◉</span></div><div class="stat-value"><span id="onlineCount">—</span><small>/ <?= count($encoders) ?></small></div><p id="availabilityNote">Checking registered servers</p></article>
+                <article class="stat-card"><div class="stat-label">Jobs in queue <span class="stat-icon" aria-hidden="true">≡</span></div><div class="stat-value" id="queueCount">—</div><p id="queueNote">Across responding encoders</p></article>
+                <article class="stat-card"><div class="stat-label">Encoding now <span class="stat-icon" aria-hidden="true">▷</span></div><div class="stat-value" id="encodingCount">—</div><p id="encodingNote">Active encoding jobs</p></article>
+                <article class="stat-card"><div class="stat-label">Concurrent capacity <span class="stat-icon" aria-hidden="true">⊞</span></div><div class="stat-value" id="capacityCount">—</div><p id="capacityNote">Parallel jobs on responding servers</p></article>
+            </section>
+            <section class="recommendation" aria-label="Recommended encoder"><div class="recommendation-icon" aria-hidden="true">✦</div><div><span class="eyebrow">SMART SELECTION</span><h2 id="recommendedName">Finding your best available encoder</h2><p id="recommendedReason">Comparing queue pressure, capacity, and response time.</p></div><button id="useRecommended" class="button dark" disabled>Open recommended <span aria-hidden="true">→</span></button></section>
+            <section class="panel fleet-panel" id="encoders">
+                <div class="panel-heading"><div><h2>Your encoders <span class="count-chip"><?= count($encoders) ?></span></h2><p>Open an encoder or its queue directly. Switching servers keeps your work open.</p></div><div class="table-tools"><label class="search-box"><span aria-hidden="true">⌕</span><input id="encoderSearch" type="search" placeholder="Search encoders…" aria-label="Search encoders"></label><select id="statusFilter" aria-label="Filter encoder status"><option value="all">All statuses</option><option value="online">Online</option><option value="attention">Needs attention</option></select></div></div>
+                <div class="table-wrap"><table><thead><tr><th>Encoder</th><th>Status</th><th>Queue / capacity</th><th>Response</th><th>Upload limit</th><th>Open encoder</th></tr></thead><tbody id="encoderRows"></tbody></table></div>
+                <div id="emptyFleet" class="empty-state" hidden><span aria-hidden="true">▤</span><h3>No encoders to show</h3><p id="emptyFleetText">Try another search or status filter.</p></div>
+                <div class="table-footer"><span><i class="small-dot"></i> Auto-refresh every 30 seconds while this tab is active</span><span id="fleetCoverage">Status checks have not completed</span></div>
+            </section>
+            <section id="workspace" class="panel workspace-panel" hidden>
+                <div class="workspace-tabs" id="workspaceTabs" role="tablist" aria-label="Encoder workspaces"></div>
+                <div class="panel-heading"><div><span class="eyebrow">ENCODER &amp; SHARING QUEUE</span><h2 id="workspaceName">Encoder</h2><p id="workspaceStatus" role="status">Opening the encoder…</p></div>
+                    <div class="workspace-actions"><a id="workspaceExternal" class="button primary" target="_blank" rel="noopener noreferrer">Open directly ↗</a><button id="retryWorkspace" class="button secondary">Reload encoder</button><button id="closeWorkspace" class="button secondary">Close this encoder</button></div>
                 </div>
-            </div>
-
-        </div>
-        <script>
-            window.myLine = new Array();
-            window.myCPUPie = new Array();
-            window.myMEMPie = new Array();
-
-            function addData(id, value) {
-                try {
-                    window.myLine[id].data.labels.push("");
-                    Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset => {
-                        dataset.data.push(value);
-                    });
-                    window.myLine[id].update();
-                } catch (e) {
-
-                }
-            }
-
-            function removeData(id) {
-                try {
-                    window.myLine[id].data.labels.shift();
-                    Array.prototype.forEach.call(window.myLine[id].data.datasets, dataset => {
-                        dataset.data.shift();
-                    });
-                    window.myLine[id].update();
-                } catch (e) {
-
-                }
-            }
-            async function pingJS(id, siteURL) {
-                const start = new Date().getTime();
-                var timeOut = 60000; // Set initial timeout to 1 minute
-                const controller = new AbortController(); // Create a new instance for this request
-                const timeoutId = setTimeout(() => controller.abort(), timeOut); // Set the timeout
-
-                try {
-                    const response = await fetch(siteURL, {
-                        mode: 'no-cors',
-                        signal: controller.signal // Attach the signal to the request
-                    });
-                    clearTimeout(timeoutId); // Clear the timeout since the fetch was successful
-
-                    const end = new Date().getTime();
-                    const ms = end - start;
-                    addData(id, ms);
-                    $('#ping' + id).text("Ping: " + ms + "ms");
-                    timeOut = 10000; // Set new timeout for the next ping
-                } catch (e) {
-                    clearTimeout(timeoutId); // Clear the timeout since the fetch has concluded (either success or error)
-
-                    // Handle fetch errors, including aborts
-                    if (e.name === 'AbortError') {
-                        console.error(`Ping to ${siteURL} timed out:`, e);
-                        $('#ping' + id).text("Ping: Timeout");
-                    } else {
-                        console.error(`Error pinging ${siteURL}:`, e);
-                    }
-                }
-
-                // Set the next ping
-                setTimeout(function() {
-                    pingJS(id, siteURL);
-                }, timeOut);
-            }
-
-            async function pingPHP(id) {
-                $.ajax({
-                    url: 'ping/' + id,
-                    success: function(response) {
-                        removeData(id);
-                        var timeOut = 120000; // 2 min
-                        if (typeof response !== 'undefined' && response) {
-                            if (response.value) {
-                                addData(id, response.value);
-                                $('#ping' + id).text("Ping: " + response.value + " ms");
-                            }
-                            timeOut = 30000;
-                        }
-                        setTimeout(function() {
-                            pingPHP(id);
-                        }, timeOut);
-                    }
-                });
-            }
-
-            function goOffline(id) {
-                $('#label' + id).removeClass("label-success");
-                $('#label' + id).addClass("label-danger");
-                $('#label' + id).text("Offline");
-            }
-
-            function goOnline(id) {
-                $('#label' + id).removeClass("label-danger");
-                $('#label' + id).addClass("label-success");
-                $('#label' + id).text("Online");
-            }
-
-            var getEncoderTimout = [];
-
-            function getEncoder(id, siteURL, user, pass, ownSiteURL) {
-                clearTimeout(getEncoderTimout[id]);
-                var serverStatusUrl = siteURL + 'serverStatus';
-                var postData = {};
-                if (user && user.length > 0) {
-                    postData['user'] = user;
-                }
-                if (pass && pass.length > 0) {
-                    postData['pass'] = pass;
-                }
-                if (ownSiteURL && ownSiteURL.length > 0) {
-                    postData['siteURL'] = ownSiteURL;
-                }
-                
-                $.ajax({
-                    type: 'POST',
-                    url: serverStatusUrl,
-                    data: postData,
-                    dataType: 'json',
-                    timeout: 1000,
-                    success: function(response) {
-                        if (typeof response == 'object') {
-                            if (response) {
-                                goOnline(id)
-                            } else {
-                                goOffline(id)
-                            }
-
-                            $('#queuesize' + id).text("Queue Size " + response.queue_size);
-                            $('#concurrent' + id).text("Concurrent " + response.concurrent);
-                            $('#maxfilesize' + id).text("Max File Size " + response.file_upload_max_size);
-
-                        } else {
-                            goOffline(id)
-                        }
-                        getEncoderTimout[id] = setTimeout(function() {
-                            getEncoder(id, siteURL, user, pass, ownSiteURL);
-                        }, 5000);
-                    },
-                    error: function() {
-                        goOffline(id);
-                        getEncoderTimout[id] = setTimeout(function() {
-                            getEncoder(id, siteURL, user, pass, ownSiteURL);
-                        }, 15000);
-                    }
-
-                });
-            }
-
-            function getBestEncoder() {
-                $.ajax({
-                    url: 'view/getBestEncoder.php',
-                    success: function(response) {
-                        $('.recommended').not("#recommended" + response.id).fadeOut();
-                        $("#recommended" + response.id).fadeIn();
-                        console.log(response);
-                        setTimeout(function() {
-                            getBestEncoder();
-                        }, 30000);
-                    }
-                });
-            }
-
-            $(document).ready(function() {
-                getBestEncoder();
-
-                <?php
-                foreach ($encoders as $value) {
-                ?>
-
-                    window.myLine[<?php echo $value['id']; ?>] = new Chart(document.getElementById("canvas<?php echo $value['id']; ?>").getContext("2d"), {
-                        animation: false,
-                        type: 'line',
-                        data: {
-                            labels: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                            datasets: [{
-                                backgroundColor: 'rgba(253,198,0, 0.3)',
-                                borderColor: 'rgba(253,198,0,0.5)',
-                                data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                legend: {
-                                    display: false,
-                                },
-                                title: {
-                                    display: false,
-                                }
-                            },
-                            legend: {
-                                display: false // This should hide the legend (the label rectangle at the top)
-                            },
-                            tooltips: {
-                                enabled: false // This should hide tooltips which can also appear as rectangles
-                            },
-                            responsive: true,
-                            scales: {
-                                xAxes: [{
-                                    display: false,
-                                    scaleLabel: {
-                                        display: false
-                                    }
-                                }],
-                                yAxes: [{
-                                    display: true,
-                                    scaleLabel: {
-                                        display: false
-                                    },
-                                    ticks: {
-                                        beginAtZero: true,
-                                        min: 0, // Minimum value of y-axis
-                                        //max: 1000, // Maximum value of y-axis
-                                        stepSize: 100,
-                                    }
-                                }]
-                            }
-                        }
-
-                    });
-
-                    pingJS(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>view/img/favicon.ico');
-                    <?php 
-                        $encoder = new Encoder($value['id']);
-                        $streamer = $encoder->getStreamer();
-                        $encoderUser = '';
-                        $encoderPass = '';
-                        $streamerSiteURL = '';
-                        if ($streamer) {
-                            $encoderUser = $streamer->getUser();
-                            $encoderPass = $streamer->getPass();
-                            $streamerSiteURL = $streamer->getSiteURL();
-                        }
-                    ?>
-                    getEncoder(<?php echo $value['id']; ?>, '<?php echo $value['siteURL']; ?>', '<?php echo htmlspecialchars($encoderUser); ?>', '<?php echo htmlspecialchars($encoderPass); ?>', '<?php echo htmlspecialchars($streamerSiteURL); ?>');
-
-                <?php
-                }
-                ?>
-
-            });
-        </script>
-
-
-    <?php
-    }
-    ?>
+                <div id="workspaceWarning" class="workspace-warning" role="status" hidden></div>
+                <div id="frameContainer"></div>
+                <p class="workspace-help">The sharing queue is inside the encoder above. If it stays blank or cannot sign in, use <strong>Open directly</strong> to load it outside the iframe. Open encoders stay running when you switch tabs.</p>
+            </section>
+            <details class="advanced-details" id="advancedDetails"><summary>Server metrics &amp; diagnostics <span>Queue, memory, response time, and connection details</span></summary>
+            <section id="encoderDetail" class="detail-grid" hidden>
+                <article class="panel selected-panel"><div class="panel-heading"><div><span class="eyebrow">SELECTED ENCODER</span><h2 id="selectedName">Encoder details</h2><a id="selectedHost" target="_blank" rel="noopener noreferrer"></a></div><span id="selectedState" class="status-badge">Checking</span></div><div id="selectedNotice" class="detail-notice"></div><div class="detail-stats"><div><span>Queue</span><strong id="selectedQueue">—</strong></div><div><span>Concurrency</span><strong id="selectedCapacity">—</strong></div><div><span>Upload limit</span><strong id="selectedUpload">—</strong></div></div><div class="memory-row"><span>Memory usage</span><strong id="memoryPercent">Not reported</strong></div><div class="meter"><span id="memoryBar"></span></div><p class="memory-caption" id="memoryCaption">Memory metrics will appear when reported by the encoder.</p><div class="activity-row"><span>Encoding <b id="selectedEncoding">—</b></span><span>Downloading <b id="selectedDownloading">—</b></span><span>Transferring <b id="selectedTransferring">—</b></span></div><div class="selected-footer"><span id="encoderVersion">Version not reported</span><button id="openWorkspace" class="button primary">Open workspace <span aria-hidden="true">↗</span></button></div></article>
+                <article class="panel response-panel"><div class="panel-heading"><div><h2>Status response time</h2><p>Round trip from this network server</p></div><span class="unit-chip">ms</span></div><div class="response-summary"><strong id="currentResponse">—</strong><span id="responseCaption">Waiting for a successful check</span></div><div id="responseChart" class="response-chart" role="img" aria-label="No response time samples yet"></div><div class="chart-axis"><span>Earlier checks</span><span>Latest check</span></div><p class="chart-note">Up to 20 successful checks from this visit. Includes status processing and authentication; this is not an ICMP ping.</p></article>
+            </section>
+            </details>
+            <section class="guide-grid" id="guide"><div><span class="eyebrow">MAKE THE MOST OF YOUR NETWORK</span><h2>A clearer view of your workflow.</h2><p>Compare availability and capacity before choosing where to encode.</p></div><article><span class="guide-number">01</span><h3>Choose with confidence</h3><p>The recommendation compares queue size per concurrent slot, then capacity and response time. It is a starting point, not a completion-time estimate.</p></article><article><span class="guide-number">02</span><h3>Know what is available</h3><p>Only confirmed responses contribute to totals. A dash means a metric is unavailable, not zero. Check each encoder for access or connection issues.</p></article><article><span class="guide-number">03</span><h3>Keep your work moving</h3><p>Open an encoder or queue in one click. Open tabs retain their work when you switch. Use Open directly if your browser blocks the embedded login.</p></article></section>
+        <?php endif; ?>
+        <noscript><div class="notice danger">Enable JavaScript to sign in, check encoder status, and open workspaces.</div></noscript>
+        </main>
+    </div>
+</div>
 </body>
-
 </html>

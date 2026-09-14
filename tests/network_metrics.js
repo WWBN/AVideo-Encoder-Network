@@ -1,0 +1,14 @@
+﻿'use strict';
+const assert = require('node:assert/strict');
+const {recommend, totals} = require('../view/js/main.js');
+const slow = {id:1,state:'online',metrics:{queue:4,capacity:2,memoryFree:100},responseMs:900};
+const free = {id:2,state:'online',metrics:{queue:0,capacity:4,memoryFree:100},responseMs:1200};
+assert.equal(recommend([slow,free]).id,2);
+assert.equal(recommend([{...free,state:'timeout'},slow]).id,1);
+assert.equal(recommend([{...free,metrics:{queue:0,capacity:0}}]),null);
+assert.equal(recommend([{...free,metrics:{queue:null,capacity:4}}]),null);
+assert.equal(recommend([free,{...free,id:3,responseMs:100}]).id,3);
+assert.deepEqual(totals([free,{...slow,state:'restricted'}],'queue'),{value:0,reporting:1,total:2});
+assert.deepEqual(totals([{...slow,state:'unavailable'}],'queue'),{value:null,reporting:0,total:1});
+assert.equal(totals([free,{...slow,metrics:{}}],'capacity').reporting,1);
+console.log('8 recommendation and partial-data checks passed.');

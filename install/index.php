@@ -1,269 +1,114 @@
 <?php
-require_once '../objects/functions.php';
-
-function getPathToApplication()
-{
-    return str_replace('install/index.php', '', $_SERVER["SCRIPT_FILENAME"]);
-}
-
-function getURLToApplication()
-{
-    $url = (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    $url = explode("install/index.php", $url);
-    $url = $url[0];
-    return $url;
-}
-
-$configFile = '../configuration.php';
-
-$defaultEncoders = array('https://encoder1.wwbn.net/', 'https://encoder2.wwbn.net/');
+ini_set('display_errors', '0');
+require_once __DIR__ . '/installer.php';
+$configured = installerConfigured();
+if (!$configured) { installerSession(); }
+header('Cache-Control: no-store');
+header('X-Frame-Options: DENY');
+function h($value) { return htmlspecialchars($value, ENT_QUOTES, 'UTF-8'); }
+$configured = installerConfigured();
+$checks = $configured ? [] : installerChecks();
+$ready = !in_array(false, array_column($checks, 'ok'), true);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Install AVideo</title>
-    <link rel="icon" href="../view/img/favicon.png">
-    <script src="https://tutorialsavideocom.cdn.ypt.me/node_modules/jquery/dist/jquery.min.js"></script>
-    <link href="https://tutorialsavideocom.cdn.ypt.me/view/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://tutorialsavideocom.cdn.ypt.me/view/bootstrap/js/bootstrap.min.js"></script>
-    <script src="https://tutorialsavideocom.cdn.ypt.me/node_modules/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://tutorialsavideocom.cdn.ypt.me/view/js/script.js" type="text/javascript"></script>
-    <script src="https://tutorialsavideocom.cdn.ypt.me/view/js/js-cookie/js.cookie.js" type="text/javascript"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Setup • AVideo Encoder Network</title>
+    <link rel="icon" href="assets/favicon.png">
+    <link rel="stylesheet" href="installer.css">
+    <script src="installer.js" defer></script>
 </head>
-
 <body>
-    <?php
-    if (file_exists($configFile)) {
-        require_once $configFile;
-        if (!empty($global['webSiteRootURL'])) {
-    ?>
-            <div class="container">
-                <h3 class="alert alert-success">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Your system is installed, remove the <code><?php echo $global['systemRootPath']; ?>install</code> directory to continue
-                    <hr>
-                    <a href="<?php echo $global['webSiteRootURL']; ?>" class="btn btn-success btn-lg center-block">Go to the main page</a>
-                </h3>
-            </div>
-        <?php
-        }
-    } else if (!empty($configFile)) {
-        file_put_contents($configFile, '');
-        if (!file_exists($configFile)) {
-        ?>
-            <div class="container">
-                <h3 class="alert alert-error">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    We could not create your <code><?php echo getPathToApplication(); ?>configuration.php</code> file
-                    <hr>
-                    <code>touch <?php echo getPathToApplication(); ?>configuration.php && chmod 777 <?php echo getPathToApplication(); ?>configuration.php</code>
-                </h3>
-            </div>
-        <?php
-        }
-    }
-    if (file_exists($configFile)) {
-        require_once $configFile;
-    }
-
-    if (empty($global['webSiteRootURL'])) {
-        if (!is_writable($configFile)) {
-        ?>
-            <div class="container">
-                <h3 class="alert alert-error">
-                    <span class="glyphicon glyphicon-ok-circle"></span>
-                    Please make sure your <code><?php echo getPathToApplication(); ?>configuration.php</code> file is writable
-                    <hr>
-                    <code>chmod 777 <?php echo getPathToApplication(); ?>configuration.php</code>
-                </h3>
-            </div>
-        <?php
-        } else {
-        ?>
-            <div class="container">
-                <img src="../view/img/logo.png" alt="Logo" class="img img-responsive center-block" />
-                <div class="row">
-                    <div class="col-md-12">
-                        <form id="configurationForm">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="webSiteRootURL">Your Site URL</label>
-                                    <input type="text" class="form-control" id="webSiteRootURL" placeholder="Enter your URL (http://yoursite.com)" value="<?php echo getURLToApplication(); ?>" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="systemRootPath">System Path to Application</label>
-                                    <input type="text" class="form-control" id="systemRootPath" placeholder="System Path to Application (/var/www/[application_path])" value="<?php echo getPathToApplication(); ?>" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="allowedEncoders">
-                                        Streamers Sites (One per line.)
-                                        <button class="btn btn-xs btn-primary" data-toggle="popover" type="button" title="What is this?" data-content="Only the listed sites will be allowed to use this encoder installation">
-                                            <i class="glyphicon glyphicon-question-sign"></i>
-                                        </button>
-                                    </label>
-                                    <textarea class="form-control" id="allowedEncoders" placeholder="Leave Blank for Public" value=""><?php echo implode(PHP_EOL, $defaultEncoders); ?></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="databaseHost">Database Host</label>
-                                    <input type="text" class="form-control" id="databaseHost" placeholder="Enter Database Host" value="localhost" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="databasePort">Database Port</label>
-                                    <input type="text" class="form-control" id="databasePort" placeholder="Enter Database Port" value="3306" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="databaseUser">Database User</label>
-                                    <input type="text" class="form-control" id="databaseUser" placeholder="Enter Database User" value="root" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="databasePass">Database Password</label>
-                                    <input type="password" class="form-control" id="databasePass" placeholder="Enter Database Password">
-                                </div>
-                                <div class="form-group">
-                                    <label for="databaseName">Database Name</label>
-                                    <input type="text" class="form-control" id="databaseName" placeholder="Enter Database Name" value="aVideoNetwork" required="required">
-                                </div>
-                                <div class="form-group">
-                                    <label for="createTables">Do you want to create database and tables?</label>
-
-                                    <select class="" id="createTables">
-                                        <option value="2">Create database and tables</option>
-                                        <option value="1">Create only tables (Do not create database)</option>
-                                        <option value="0">Do not create any, I will import the script manually</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="alert alert-info" id="streamer">
-
-                                    <div class="form-group">
-                                        <label for="siteURL">Streamer Site URL
-                                            <button class="btn btn-xs btn-primary" data-toggle="popover" type="button" title="What is this?" data-content="If you do not have Streamer Site yet, download it https://github.com/DanielnetoDotCom/AVideo">
-                                                <i class="glyphicon glyphicon-question-sign"></i>
-                                            </button>
-                                        </label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-                                            <input id="siteURL" placeholder="http://www.your-tube-site.com" class="form-control" type="url" value="" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="inputUser">Streamer Site admin User</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-                                            <input id="inputUser" placeholder="User" class="form-control" type="text" value="admin" required>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="siteURL">Streamer Site admin Password</label>
-                                        <div class="input-group">
-                                            <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-                                            <input id="inputPassword" placeholder="Password" class="form-control" type="password" value="">
-                                        </div>
-                                    </div>
-                                    <div class="alert alert-warning">
-                                        If you do not have Streamer Site yet, download it <a href="https://github.com/DanielnetoDotCom/AVideo" target="_blank">here</a>. Then, please, go back here and finish this installation.
-                                    </div>
-                                </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
-                        </form>
-                    </div>
+<div class="shell">
+    <aside class="sidebar">
+        <a class="brand" href="https://avideo.com/" aria-label="AVideo"><img src="assets/logo.png" alt="AVideo" width="250" height="70"></a>
+        <div class="product">ENCODER NETWORK</div>
+        <div class="sidebar-heading">Your network.<br>Ready to<br><span>connect.</span></div>
+        <p class="sidebar-copy">Connect your AVideo site to a network of encoding servers.</p>
+        <?php if (!$configured): ?>
+        <nav aria-label="Setup steps">
+            <a href="#database"><span>01</span><div>Database<small>Connection and storage</small></div></a>
+            <a href="#network"><span>02</span><div>Your network<small>Address and encoders</small></div></a>
+            <a href="#streamer"><span>03</span><div>AVideo site<small>Administrator access</small></div></a>
+        </nav>
+        <?php endif; ?>
+        <div class="sidebar-footer"><span class="signal" aria-hidden="true"></span> GUIDED SETUP<small>MySQL / MariaDB · Windows / Linux</small></div>
+    </aside>
+    <main>
+        <header class="topbar"><span>Initial setup</span><span class="pill">AVideo Encoder Network</span></header>
+        <div class="content">
+        <?php if ($configured): ?>
+            <section class="complete card">
+                <span class="complete-icon" aria-hidden="true">✓</span>
+                <div class="eyebrow">SETUP COMPLETE</div>
+                <h1>Installation complete.</h1>
+                <p>Setup is locked. Your application is ready to open.</p>
+                <a class="button primary" href="../view/index.php">Open application</a>
+            </section>
+        <?php else: ?>
+            <div class="eyebrow">GET STARTED</div>
+            <h1>Set up your encoder network.</h1>
+            <p class="intro">Enter your details below. We will create the database, install the tables,<br class="desktop"> and generate your configuration file.</p>
+            <section class="environment" aria-label="Server requirements">
+                <div class="environment-title"><span class="status-dot <?= $ready ? '' : 'bad' ?>"></span><strong><?= $ready ? 'Environment ready' : 'Action required' ?></strong><span>Server check</span></div>
+                <div class="checks">
+                    <?php foreach ($checks as $check): ?>
+                    <div class="check <?= $check['ok'] ? '' : 'failed' ?>" title="<?= h($check['detail']) ?>"><span aria-hidden="true"><?= $check['ok'] ? '✓' : '!' ?></span><?= h($check['label']) ?></div>
+                    <?php endforeach; ?>
                 </div>
-
-            </div>
-    <?php
-
-        }
-    }
-    ?>
-    <script src="../view/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../view/js/seetalert/sweetalert.min.js" type="text/javascript"></script>
-    <script src="../view/js/main.js" type="text/javascript"></script>
-
-    <script>
-        $(function() {
-            $('#configurationForm').submit(function(evt) {
-                evt.preventDefault();
-
-                modal.showPleaseWait();
-                var webSiteRootURL = $('#webSiteRootURL').val();
-                var systemRootPath = $('#systemRootPath').val();
-                var databaseHost = $('#databaseHost').val();
-                var databasePort = $('#databasePort').val();
-                var databaseUser = $('#databaseUser').val();
-                var databasePass = $('#databasePass').val();
-                var databaseName = $('#databaseName').val();
-                var allowedEncoders = $('#allowedEncoders').val();
-                var createTables = $('#createTables').val();
-
-                var siteURL = $('#siteURL').val();
-                var inputUser = $('#inputUser').val();
-                var inputPassword = $('#inputPassword').val();
-                $.ajax({
-                    url: siteURL + '/login',
-                    data: {
-                        "user": inputUser,
-                        "pass": inputPassword,
-                        "siteURL": siteURL
-                    },
-                    type: 'post',
-                    success: function(response) {
-                        if (!response.isAdmin) {
-                            modal.hidePleaseWait();
-                            swal("Sorry!", "Your Streamer site, user or password is wrong!", "error");
-                            $('#streamer').removeClass('alert-success');
-                            $('#streamer').removeClass('alert-info');
-                            $('#streamer').addClass('alert-danger');
-                        } else {
-                            $('#streamer').removeClass('alert-info');
-                            $('#streamer').removeClass('alert-danger');
-                            $('#streamer').addClass('alert-success');
-                            console.log(webSiteRootURL + 'install/checkConfiguration.php');
-                            $.ajax({
-                                url: webSiteRootURL + 'install/checkConfiguration.php',
-                                data: {
-                                    webSiteRootURL: webSiteRootURL,
-                                    systemRootPath: systemRootPath,
-                                    allowedEncoders: allowedEncoders,
-                                    databaseHost: databaseHost,
-                                    databasePort: databasePort,
-                                    databaseUser: databaseUser,
-                                    databasePass: databasePass,
-                                    databaseName: databaseName,
-                                    createTables: createTables,
-                                    siteURL: siteURL,
-                                    inputUser: inputUser,
-                                    inputPassword: inputPassword
-                                },
-                                type: 'post',
-                                success: function(response) {
-                                    modal.hidePleaseWait();
-                                    if (response.error) {
-                                        avideoAlertError(response.msg);
-                                    } else {
-                                        avideoAlertSuccess(response.msg);
-                                        window.location.reload(false);
-                                    }
-                                },
-                                error: function(xhr, ajaxOptions, thrownError) {
-                                    modal.hidePleaseWait();
-                                    if (xhr.status == 404) {
-                                        swal("Sorry!", "Your Site URL is wrong!", "error");
-                                    } else {
-                                        swal("Sorry!", "Unknow error!", "error");
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-            });
-        });
-    </script>
+                <?php if (!$ready): ?>
+                    <details open class="requirement-help"><summary>How to resolve missing requirements</summary>
+                        <?php foreach ($checks as $check): if ($check['ok']) { continue; } $help = installerRequirementHelp($check); ?>
+                        <h3><?= h($check['label']) ?></h3><p><?= h($help['text']) ?></p>
+                        <?php if (!empty($help['command'])): ?><pre><code><?= h($help['command']) ?></code></pre><?php endif; ?>
+                        <?php endforeach; ?><p>Then reload this page.</p>
+                    </details>
+                <?php endif; ?>
+            </section>
+            <?php include __DIR__ . '/ubuntu-help.php'; ?>
+            <form id="configurationForm" data-ready="<?= $ready ? '1' : '0' ?>">
+                <input type="hidden" name="token" value="<?= h($_SESSION['installerToken']) ?>">
+                <section class="card" id="database">
+                    <div class="section-heading"><span class="number">01</span><div><h2>Database</h2><p>Where your network stores its data.</p></div><span class="tag">MySQL / MariaDB</span></div>
+                    <div class="fields">
+                        <div class="field wide"><label for="databaseHost">Database host</label><input id="databaseHost" name="databaseHost" value="localhost" required maxlength="253" autocomplete="off" spellcheck="false"><small>Use localhost if the database runs on this server.</small></div>
+                        <div class="field narrow"><label for="databasePort">Port</label><input id="databasePort" name="databasePort" type="number" value="3306" min="1" max="65535" required></div>
+                        <div class="field"><label for="databaseUser">Username</label><input id="databaseUser" name="databaseUser" value="root" required maxlength="80" autocomplete="off" spellcheck="false"></div>
+                        <div class="field"><label for="databasePass">Database password <span class="optional">if applicable</span></label><div class="password-field"><input id="databasePass" name="databasePass" type="password" autocomplete="new-password"><button type="button" class="reveal" data-target="databasePass" aria-label="Show database password" aria-pressed="false">Show</button></div></div>
+                        <div class="field full"><label for="databaseName">Database name</label><input id="databaseName" name="databaseName" value="aVideoNetwork" pattern="[A-Za-z0-9_\-]{1,64}" maxlength="64" required spellcheck="false"><small>We will create this database if it does not exist. An existing database must be empty.</small></div>
+                    </div>
+                    <div class="card-footer"><span>Testing the connection does not change any data.</span><button type="button" class="button secondary" id="testConnection">Test connection <span aria-hidden="true">↗</span></button></div>
+                    <div id="connectionResult" class="inline-result" role="status" hidden></div>
+                </section>
+                <section class="card" id="network">
+                    <div class="section-heading"><span class="number">02</span><div><h2>Your network</h2><p>Set the public address and initial encoders.</p></div></div>
+                    <div class="fields">
+                        <div class="field full"><label for="webSiteRootURL">Encoder Network URL</label><input id="webSiteRootURL" name="webSiteRootURL" type="url" value="<?= h(installerURL()) ?>" required maxlength="254" spellcheck="false"><small>The public address used to access this installation.</small></div>
+                        <div class="field full"><label for="allowedEncoders">Encoding servers <span class="optional">optional</span></label><textarea id="allowedEncoders" name="allowedEncoders" rows="3" maxlength="8192" spellcheck="false" placeholder="https://encoder.example.com/">https://encoder1.wwbn.net/
+https://encoder2.wwbn.net/</textarea><small>One URL per line. You can also add encoders later.</small></div>
+                    </div>
+                    <details class="path-details"><summary>Automatically detected directory</summary><code><?= h(installerRoot()) ?></code><p>The configuration follows the application directory, even if it is moved.</p></details>
+                </section>
+                <section class="card" id="streamer">
+                    <div class="section-heading"><span class="number">03</span><div><h2>AVideo site</h2><p>Connect the network to your video site.</p></div></div>
+                    <div class="fields">
+                        <div class="field full"><label for="siteURL">Your AVideo site URL</label><input id="siteURL" name="siteURL" type="url" placeholder="https://videos.example.com/" required maxlength="254" spellcheck="false"></div>
+                        <div class="field"><label for="inputUser">Administrator username</label><input id="inputUser" name="inputUser" value="admin" required maxlength="45" autocomplete="username" spellcheck="false"></div>
+                        <div class="field"><label for="inputPassword">Administrator password</label><div class="password-field"><input id="inputPassword" name="inputPassword" type="password" required autocomplete="current-password"><button type="button" class="reveal" data-target="inputPassword" aria-label="Show administrator password" aria-pressed="false">Show</button></div></div>
+                    </div>
+                    <div class="info"><span aria-hidden="true">i</span><p>We will verify these credentials with your AVideo site before installing. Need a video site? <a href="https://github.com/WWBN/AVideo" target="_blank" rel="noopener noreferrer">Explore AVideo ↗</a></p></div>
+                </section>
+                <section id="result" class="card result" tabindex="-1" aria-live="polite" hidden></section>
+                <div class="submit-row"><p><strong>Everything in one step.</strong><br>Database, tables, and configuration.php.</p><button class="button primary" id="installButton" type="submit" <?= $ready ? '' : 'disabled' ?>>Install Encoder Network <span aria-hidden="true">→</span></button></div>
+                <p class="install-note">If anything goes wrong, instructions and commands to run on your server will appear here.</p>
+            </form>
+            <noscript><p class="info">Enable JavaScript in your browser to test the connection and run setup.</p></noscript>
+        <?php endif; ?>
+        <footer class="page-footer"><span>AVideo Encoder Network</span><span>Infrastructure for your videos.</span></footer>
+        </div>
+    </main>
+</div>
 </body>
-
 </html>

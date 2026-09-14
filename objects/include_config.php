@@ -4,7 +4,8 @@
 global $global;
 global $config;
 
-$global['mysqli'] = new mysqli($mysqlHost, $mysqlUser, $mysqlPass, $mysqlDatabase);
+$global['mysqli'] = new mysqli($mysqlHost, $mysqlUser, $mysqlPass, $mysqlDatabase, (int) ($mysqlPort ?? 3306));
+$global['mysqli']->set_charset('utf8mb4');
 
 $now = new DateTime();
 $mins = $now->getOffset() / 60;

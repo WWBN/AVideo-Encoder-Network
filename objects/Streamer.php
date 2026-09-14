@@ -18,13 +18,12 @@ class Streamer extends ObjectYPT{
     private static function get($user, $siteURL)
     {
         global $global;
-        $sql = "SELECT * FROM  " . static::getTableName() . " WHERE user = '{$user}' AND lower(siteURL) = lower('{$siteURL}') LIMIT 1";
-        //echo $sql;exit;
-        $res = $global['mysqli']->query($sql);
-        if ($res) {
-            return $res->fetch_assoc();
-        }
-        die($sql . '\nError : (' . $global['mysqli']->errno . ') ' . $global['mysqli']->error);
+        $statement = $global['mysqli']->prepare('SELECT * FROM ' . static::getTableName() . ' WHERE user = ? AND lower(siteURL) = lower(?) LIMIT 1');
+        $statement->bind_param('ss', $user, $siteURL);
+        $statement->execute();
+        $row = $statement->get_result()->fetch_assoc();
+        $statement->close();
+        return $row;
     }
 
     private static function getFirst()
@@ -42,7 +41,7 @@ class Streamer extends ObjectYPT{
     static function getFirstURL()
     {
         $row = static::getFirst();
-        return addLastSlash($row['siteURL']);
+        return empty($row['siteURL']) ? '' : addLastSlash($row['siteURL']);
     }
 
     static function createIfNotExists($user, $pass, $siteURL, $encodedPass = false)
@@ -147,8 +146,19 @@ class Streamer extends ObjectYPT{
     }
 
     function save(){
+        global $global;
         $this->updatePassFieldIfNeed();
-        return parent::save();
+        if (!empty($this->id)) {
+            $statement = $global['mysqli']->prepare('UPDATE streamers SET siteURL=?, user=?, pass=?, modified=NOW() WHERE id=?');
+            $statement->bind_param('sssi', $this->siteURL, $this->user, $this->pass, $this->id);
+        } else {
+            $statement = $global['mysqli']->prepare('INSERT INTO streamers (siteURL,user,pass,created,modified) VALUES (?,?,?,NOW(),NOW())');
+            $statement->bind_param('sss', $this->siteURL, $this->user, $this->pass);
+        }
+        $statement->execute();
+        $id = $this->id ?: $global['mysqli']->insert_id;
+        $statement->close();
+        return $id;
     }
 
 }
